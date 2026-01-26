@@ -7,9 +7,9 @@ export default function Section({ id, title, lead, cards = [] }) {
         <h2>{title}</h2>
         {lead && <p className="section-lead">{lead}</p>}
 
-        <div className="cards">
+        <div className="cards-columns">
           {cards.map((c, i) => (
-            <Card key={i} title={c.title}>{c.text}</Card>
+            <Card key={i} title={c.title} img={c.img}>{c.text}</Card>
           ))}
         </div>
       </div>
