@@ -1,4 +1,5 @@
 import './App.css';
+import { useEffect, useState } from 'react';
 import avatar from './assets/avatar.jpeg';
 import plane from './assets/plane.jpg';
 import unet from './assets/mozaika_next.png';
@@ -33,6 +34,15 @@ interface CardItem {
   img?: string;
   links?: Link[];
   stat?: string;
+}
+
+interface ApiProject {
+  id: number;
+  title: string;
+  description: string;
+  image?: string | null;
+  stat?: string;
+  links?: Link[];
 }
 
 const aboutItems: AboutItem[] = [
@@ -81,39 +91,63 @@ const publications: Publication[] = [
   },
 ];
 
-const projectCards: CardItem[] = [
-  {
-    title: "GrepolisBot",
-    text: "A Tampermonkey userscript for the browser game Grepolis that automates farm collection, culture events and attack dodging. Built with a modern JS workflow (esbuild, ESLint, Prettier). The control panel is draggable and persists settings across page refreshes.",
-    stat: "63+ installs on GreasyFork",
-    links: [
-      { label: "GreasyFork", url: "https://greasyfork.org/en/scripts/468760-grepolisbot" },
-      { label: "GitHub", url: "https://github.com/NaKamize/GrepolisBot" },
-    ],
-  },
-  {
-    title: "Computer Vision",
-    text: "Object tracking, image segmentation and visual analysis, including work on advanced U-Net-based models for image processing and real-world inspection tasks.",
-    img: unet,
-  },
-  {
-    title: "Cloud & Information Systems",
-    text: "Hands-on experience with Microsoft Azure: cloud deployment, backend development, and building a school information system with full system integration.",
-    img: azure_logo,
-  },
-  {
-    title: "Aerospace & Avionics",
-    text: "Python scripting and system tests for safety-critical aerospace and avionics applications, focusing on automation, reliability, and compliance with industry standards.",
-    img: plane,
-  },
-];
-
 const skills: string[] = [
   'Formal Grammars', 'Music Informatics', 'Computer Vision',
   'Microsoft Azure', 'Information Systems', 'Python', 'Aerospace & Avionics',
 ];
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+
+function normalizeImageUrl(img?: string | null): string | undefined {
+  if (!img) {
+    return undefined;
+  }
+  if (img.startsWith('http://') || img.startsWith('https://')) {
+    return img;
+  }
+  return `${API_BASE_URL}${img}`;
+}
+
 function App() {
+  const [apiProjectCards, setApiProjectCards] = useState<CardItem[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function fetchProjects() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/projects/`);
+        if (!response.ok) {
+          return;
+        }
+
+        const data: ApiProject[] = await response.json();
+        if (!isMounted || !Array.isArray(data) || data.length === 0) {
+          return;
+        }
+
+        const mappedCards: CardItem[] = data.map((project) => ({
+          title: project.title,
+          text: project.description,
+          img: normalizeImageUrl(project.image),
+          links: project.links,
+          stat: project.stat,
+        }));
+
+        setApiProjectCards(mappedCards);
+      } catch {
+        // Keep static fallback if API is unavailable.
+      }
+    }
+
+    fetchProjects();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const displayedProjectCards = apiProjectCards.length > 0 ? apiProjectCards : [];
+
   return (
     <div className="App">
       <header className="hero">
@@ -167,7 +201,7 @@ function App() {
         title="Projects"
         lead="A selection of projects spanning game automation, computer vision, cloud infrastructure, and aerospace software."
         type="cards"
-        cards={projectCards}
+        cards={displayedProjectCards}
       />
 
       <Footer />

@@ -29,3 +29,7 @@ declare module '*.webp' {
   const src: string;
   export default src;
 }
+
+declare const process: {
+  env: Record<string, string | undefined>;
+};
