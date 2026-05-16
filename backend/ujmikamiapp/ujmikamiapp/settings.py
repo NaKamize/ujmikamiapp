@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # Local
     'api',
     'projects',
+    'ml_models',
 ]
 
 MIDDLEWARE = [

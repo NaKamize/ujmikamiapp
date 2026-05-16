@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: ./backend/ujmikamiapp
+      dockerfile: Dockerfile
+    env_file:
+      - ./backend/ujmikamiapp/.env
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_API_BASE_URL: ""
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    restart: unless-stopped

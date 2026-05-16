@@ -1,11 +1,10 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import avatar from './assets/avatar.jpeg';
-import plane from './assets/plane.jpg';
-import unet from './assets/mozaika_next.png';
-import azure_logo from './assets/microsoft_azure.png';
 import Section from './components/Section';
 import Footer from './components/Footer';
+import Navbar from './components/Navbar';
+import MLShowcase from './components/MLShowcase';
 
 interface Link {
   label: string;
@@ -43,6 +42,24 @@ interface ApiProject {
   image?: string | null;
   stat?: string;
   links?: Link[];
+}
+
+interface ApiMLModel {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  category_display: string;
+  architecture: string;
+  framework: string;
+  competition_name: string;
+  competition_url: string;
+  dataset_description: string;
+  metrics: Record<string, number | string>;
+  rank: string;
+  score: string;
+  image: string | null;
+  links: Link[];
 }
 
 const aboutItems: AboutItem[] = [
@@ -96,7 +113,7 @@ const skills: string[] = [
   'Microsoft Azure', 'Information Systems', 'Python', 'Aerospace & Avionics',
 ];
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL ?? 'http://localhost:8000';
 
 function normalizeImageUrl(img?: string | null): string | undefined {
   if (!img) {
@@ -108,8 +125,18 @@ function normalizeImageUrl(img?: string | null): string | undefined {
   return `${API_BASE_URL}${img}`;
 }
 
+const NAV_LINKS = [
+  { id: 'about', label: 'About' },
+  { id: 'publications', label: 'Research' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'ml-showcase', label: 'ML Showcase' },
+];
+
 function App() {
   const [apiProjectCards, setApiProjectCards] = useState<CardItem[]>([]);
+  const [mlModels, setMlModels] = useState<ApiMLModel[]>([]);
+  const [mlLoading, setMlLoading] = useState(true);
+  const [mlError, setMlError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -140,7 +167,34 @@ function App() {
       }
     }
 
+    async function fetchMLModels() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/ml-models/`);
+        if (!isMounted) return;
+
+        if (!response.ok) {
+          throw new Error(`Server responded with ${response.status}`);
+        }
+
+        const data: ApiMLModel[] = await response.json();
+        if (isMounted) {
+          if (Array.isArray(data) && data.length > 0) {
+            setMlModels(data);
+          }
+          setMlLoading(false);
+        }
+      } catch (err) {
+        if (isMounted) {
+          setMlError(
+            err instanceof Error ? err.message : 'Failed to load ML models'
+          );
+          setMlLoading(false);
+        }
+      }
+    }
+
     fetchProjects();
+    fetchMLModels();
     return () => {
       isMounted = false;
     };
@@ -150,6 +204,8 @@ function App() {
 
   return (
     <div className="App">
+      <Navbar links={NAV_LINKS} />
+
       <header className="hero">
         <div className="hero-glow" />
         <div className="hero-content">
@@ -202,6 +258,12 @@ function App() {
         lead="A selection of projects spanning game automation, computer vision, cloud infrastructure, and aerospace software."
         type="cards"
         cards={displayedProjectCards}
+      />
+
+      <MLShowcase
+        models={mlModels}
+        loading={mlLoading}
+        error={mlError}
       />
 
       <Footer />

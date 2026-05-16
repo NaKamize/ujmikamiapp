@@ -1,0 +1,258 @@
+/* ── ML Showcase ────────────────────────── */
+.ml-models-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  margin-top: 2.5rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ml-card {
+  background: #ffffff;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 16px rgba(15, 23, 42, 0.06);
+  border: 1.5px solid rgba(99, 102, 241, 0.10);
+  transition: transform 0.18s, box-shadow 0.18s, border-color 0.2s;
+  overflow: hidden;
+}
+
+.ml-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.10);
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+/* Header row: badges + title */
+.ml-card-header {
+  padding: 1.5rem 2rem 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.ml-card-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  margin: 0;
+  line-height: 1.3;
+  flex: 1 1 100%;
+}
+
+.ml-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  order: -1;
+}
+
+.ml-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.22rem 0.7rem;
+  border-radius: 0.5rem;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ml-badge-architecture {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.ml-badge-category {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.ml-badge-rank {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.ml-badge-score {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+/* Body */
+.ml-card-body {
+  padding: 0.5rem 2rem 1.5rem;
+}
+
+.ml-card-desc {
+  color: var(--text);
+  font-size: 0.92rem;
+  line-height: 1.65;
+  margin: 0.5rem 0 1rem;
+}
+
+/* Metrics grid */
+.ml-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.6rem;
+  margin: 1rem 0 1.2rem;
+}
+
+.ml-metric {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  text-align: center;
+}
+
+.ml-metric-key {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b;
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+.ml-metric-value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  font-family: var(--font-display);
+}
+
+/* Expandable details */
+.ml-details-toggle {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.3rem 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: color 0.2s;
+}
+
+.ml-details-toggle:hover {
+  color: var(--accent-hover);
+}
+
+.ml-details-toggle::after {
+  content: '▸';
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  display: inline-block;
+}
+
+.ml-details-toggle.open::after {
+  transform: rotate(90deg);
+}
+
+.ml-details {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.35s ease, padding 0.3s ease;
+  padding: 0 2rem;
+}
+
+.ml-details.open {
+  max-height: 600px;
+  padding: 0 2rem 1.5rem;
+}
+
+.ml-details-inner {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1rem;
+}
+
+.ml-details h4 {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  margin: 0.8rem 0 0.3rem;
+}
+
+.ml-details h4:first-child {
+  margin-top: 0;
+}
+
+.ml-details p {
+  color: var(--text);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  margin: 0 0 0.5rem;
+}
+
+/* Links */
+.ml-card-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.ml-card-link {
+  background: var(--accent-dim);
+  color: var(--accent);
+  padding: 0.25rem 0.85rem;
+  border-radius: 1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid rgba(99, 102, 241, 0.20);
+  transition: background 0.2s, color 0.2s;
+}
+
+.ml-card-link:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Loading / Error states */
+.ml-loading,
+.ml-error,
+.ml-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.ml-error {
+  color: #dc2626;
+}
+
+.ml-empty {
+  color: var(--hero-muted);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .ml-card-header {
+    padding: 1.2rem 1.2rem 0.3rem;
+  }
+
+  .ml-card-body {
+    padding: 0.3rem 1.2rem 1.2rem;
+  }
+
+  .ml-details.open {
+    padding: 0 1.2rem 1.2rem;
+  }
+
+  .ml-card-title {
+    font-size: 1rem;
+  }
+
+  .ml-metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
