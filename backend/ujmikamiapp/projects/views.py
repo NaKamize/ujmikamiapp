@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .models import Project
-from .serializers import ProjectSerializer
+from .models import Project, WorkExperience
+from .serializers import ProjectSerializer, WorkExperienceSerializer
 
 
 class ProjectListView(generics.ListAPIView):
@@ -19,3 +19,9 @@ class ProjectDetailView(generics.RetrieveAPIView):
     """GET /api/projects/<id>/ — returns a single project."""
     serializer_class = ProjectSerializer
     queryset = Project.objects.prefetch_related('tags', 'links').all()
+
+
+class WorkExperienceListView(generics.ListAPIView):
+    """GET /api/experiences/ — returns all work experiences ordered by 'order' field."""
+    serializer_class = WorkExperienceSerializer
+    queryset = WorkExperience.objects.prefetch_related('technologies').all()

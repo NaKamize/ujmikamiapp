@@ -1,0 +1,177 @@
+/* ── Timeline container ─────────────────── */
+.exp-timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-left: 2rem;
+}
+
+.exp-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.4rem;
+  top: 0.6rem;
+  bottom: 0.6rem;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    var(--accent) 0%,
+    var(--accent-dim) 100%
+  );
+  border-radius: 2px;
+}
+
+/* ── Single card ────────────────────────── */
+.exp-card {
+  position: relative;
+  display: flex;
+  gap: 1.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.exp-card:last-child {
+  padding-bottom: 0;
+}
+
+/* ── Timeline dot ───────────────────────── */
+.exp-timeline-dot {
+  position: absolute;
+  left: -1.65rem;
+  top: 0.35rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 3px var(--accent-dim);
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.exp-dot-pulse {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.25;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.25; }
+  50%       { transform: scale(1.6); opacity: 0; }
+}
+
+/* ── Card body ──────────────────────────── */
+.exp-body {
+  flex: 1;
+  background: #ffffff;
+  border: 1px solid rgba(99, 102, 241, 0.12);
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.exp-body:hover {
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.12);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* ── Header row ─────────────────────────── */
+.exp-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.exp-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.exp-role {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.exp-company {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.exp-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+}
+
+.exp-period {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-strong);
+  white-space: nowrap;
+  background: var(--accent-dim);
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+}
+
+.exp-location {
+  font-size: 0.78rem;
+  color: var(--hero-muted);
+}
+
+/* ── Description ────────────────────────── */
+.exp-description {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.7;
+  margin: 0 0 1rem;
+}
+
+/* ── Tech badges ────────────────────────── */
+.exp-tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.exp-tech-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-dim);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* ── Responsive ─────────────────────────── */
+@media (max-width: 600px) {
+  .exp-timeline {
+    padding-left: 1.5rem;
+  }
+
+  .exp-header {
+    flex-direction: column;
+  }
+
+  .exp-meta {
+    align-items: flex-start;
+  }
+}

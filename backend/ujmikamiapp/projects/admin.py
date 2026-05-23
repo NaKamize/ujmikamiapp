@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Project, ProjectLink, Tag
+from .models import Project, ProjectLink, Tag, WorkExperience, WorkExperienceTechnology
 
 
 class ProjectLinkInline(admin.TabularInline):
@@ -18,3 +18,16 @@ class ProjectAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     pass
+
+
+class WorkExperienceTechnologyInline(admin.TabularInline):
+    model = WorkExperienceTechnology
+    extra = 1
+
+
+@admin.register(WorkExperience)
+class WorkExperienceAdmin(admin.ModelAdmin):
+    list_display = ['role', 'company', 'period', 'current', 'order']
+    list_filter = ['current']
+    search_fields = ['role', 'company', 'description']
+    inlines = [WorkExperienceTechnologyInline]

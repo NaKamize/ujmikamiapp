@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Project, ProjectLink, Tag
+from .models import Project, ProjectLink, Tag, WorkExperience, WorkExperienceTechnology
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -24,4 +24,21 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'description', 'category', 'category_display',
             'tags', 'links', 'image', 'stat', 'order', 'created_at',
+        ]
+
+
+class WorkExperienceTechnologySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkExperienceTechnology
+        fields = ['label']
+
+
+class WorkExperienceSerializer(serializers.ModelSerializer):
+    technologies = WorkExperienceTechnologySerializer(many=True, read_only=True)
+
+    class Meta:
+        model = WorkExperience
+        fields = [
+            'id', 'company', 'role', 'period', 'location',
+            'description', 'current', 'order', 'technologies',
         ]

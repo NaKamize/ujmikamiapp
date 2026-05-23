@@ -1,94 +1,114 @@
-/* ── Grid ───────────────────────────────── */
+/* ── Grid ──────────────────────────────────── */
 .cards-columns {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.75rem;
   margin-top: 2.5rem;
 }
 
-/* ── Card ───────────────────────────────── */
+/* ── Card ──────────────────────────────────── */
 .card {
   background: #ffffff;
   border-radius: 1.2rem;
   box-shadow: 0 2px 16px rgba(15, 23, 42, 0.07);
-  padding: 1.8rem 1.5rem 1.5rem;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  border: 1.5px solid rgba(99, 102, 241, 0.08);
+  overflow: hidden;
+  border: 1.5px solid rgba(99, 102, 241, 0.10);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
   border-top: 4px solid var(--accent);
-  transition: transform 0.18s, box-shadow 0.18s, border-top-color 0.2s;
-  box-sizing: border-box;
-  min-height: 280px;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 36px rgba(99, 102, 241, 0.14);
-  border-top-color: #a855f7;
+  transform: translateY(-6px);
+  box-shadow: 0 14px 40px rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.25);
 }
 
-.card h3 {
+/* ── Image ─────────────────────────────────── */
+.card-img-wrapper {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.card-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.card:hover .card-img-wrapper img {
+  transform: scale(1.06);
+}
+
+/* ── Body ──────────────────────────────────── */
+.card-body {
+  padding: 1.5rem 1.5rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.card-body h3 {
   font-family: var(--font-display);
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--text-strong);
   letter-spacing: -0.2px;
-  margin: 0 0 0.7rem;
-  text-align: left;
+  margin: 0 0 0.65rem;
+  line-height: 1.35;
 }
 
-.card > p {
+.card-body > p {
   color: var(--text);
-  font-size: 0.93rem;
-  line-height: 1.6;
-  margin: 0;
-  text-align: left;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  margin: 0 0 1rem;
   flex: 1;
 }
 
-.card img {
-  width: 100%;
-  max-height: 130px;
-  object-fit: contain;
-  border-radius: 0.75rem;
-  padding: 0.75rem;
-  background: #f8f8ff;
-  margin-top: 1.2rem;
-  display: block;
-}
-
+/* ── Stat badge ────────────────────────────── */
 .card-stat {
   display: inline-flex;
+  align-self: flex-start;
   align-items: center;
   background: var(--accent-dim);
   color: var(--accent);
   border: 1px solid rgba(99, 102, 241, 0.20);
   border-radius: 1rem;
-  padding: 0.22rem 0.75rem;
+  padding: 0.25rem 0.8rem;
   font-size: 0.78rem;
   font-weight: 700;
-  margin: 0.8rem 0 0;
+  margin: 0 0 0.9rem;
 }
 
+/* ── Links ─────────────────────────────────── */
 .card-links {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
   margin-top: auto;
-  padding-top: 1rem;
+  padding-top: 0.25rem;
 }
 
 .card-link {
   background: var(--accent);
   color: #fff;
-  padding: 0.32rem 0.9rem;
+  padding: 0.35rem 0.95rem;
   border-radius: 1rem;
   font-size: 0.78rem;
   font-weight: 600;
   text-decoration: none;
   transition: background 0.2s, transform 0.15s;
-  box-shadow: 0 1px 6px var(--accent-glow);
+  box-shadow: 0 1px 6px rgba(99, 102, 241, 0.25);
 }
 
 .card-link:hover {
@@ -96,9 +116,13 @@
   transform: translateY(-1px);
 }
 
-/* ── Responsive ─────────────────────────── */
-@media (max-width: 600px) {
+/* ── Responsive ────────────────────────────── */
+@media (max-width: 700px) {
   .cards-columns {
     grid-template-columns: 1fr;
+  }
+
+  .card-img-wrapper {
+    height: 170px;
   }
 }

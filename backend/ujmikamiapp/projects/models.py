@@ -41,3 +41,27 @@ class ProjectLink(models.Model):
 
     def __str__(self):
         return f'{self.project.title} — {self.label}'
+
+
+class WorkExperience(models.Model):
+    company = models.CharField(max_length=200)
+    role = models.CharField(max_length=200)
+    period = models.CharField(max_length=100)
+    location = models.CharField(max_length=200, blank=True)
+    description = models.TextField()
+    current = models.BooleanField(default=False)
+    order = models.PositiveIntegerField(default=0, help_text='Display order (lower = first / most recent)')
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f'{self.role} at {self.company}'
+
+
+class WorkExperienceTechnology(models.Model):
+    experience = models.ForeignKey(WorkExperience, on_delete=models.CASCADE, related_name='technologies')
+    label = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f'{self.experience} — {self.label}'

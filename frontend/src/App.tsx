@@ -1,10 +1,15 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import avatar from './assets/avatar.jpeg';
+import azureImg from './assets/microsoft_azure.png';
+import unetImg from './assets/UNet-En.png';
+import grepolisImg from './assets/grepolisbot_preview.png';
+import musicImg from './assets/music.png';
 import Section from './components/Section';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import MLShowcase from './components/MLShowcase';
+import WorkExperience, { WorkExperienceItem } from './components/WorkExperience';
 
 interface Link {
   label: string;
@@ -42,6 +47,18 @@ interface ApiProject {
   image?: string | null;
   stat?: string;
   links?: Link[];
+}
+
+interface ApiExperience {
+  id: number;
+  company: string;
+  role: string;
+  period: string;
+  location: string;
+  description: string;
+  current: boolean;
+  order: number;
+  technologies: { label: string }[];
 }
 
 interface ApiMLModel {
@@ -113,6 +130,15 @@ const skills: string[] = [
   'Microsoft Azure', 'Information Systems', 'Python', 'Aerospace & Avionics',
 ];
 
+/* Maps project titles from the API to local asset imports.
+   When a project matches, the bundled asset is used instead of the API image URL. */
+const PROJECT_IMAGES: Record<string, string> = {
+  'Azure Data Pipelines & Infrastructure': azureImg,
+  'U-Net Image Upscaling with Transfer Learning': unetImg,
+  'GrepolisBot — Game Automation Userscript': grepolisImg,
+  'Music Grammar Orchestrator': musicImg,
+};
+
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL ?? 'http://localhost:8000';
 
 function normalizeImageUrl(img?: string | null): string | undefined {
@@ -127,6 +153,7 @@ function normalizeImageUrl(img?: string | null): string | undefined {
 
 const NAV_LINKS = [
   { id: 'about', label: 'About' },
+  { id: 'experience', label: 'Experience' },
   { id: 'publications', label: 'Research' },
   { id: 'projects', label: 'Projects' },
   { id: 'ml-showcase', label: 'ML Showcase' },
@@ -137,9 +164,24 @@ function App() {
   const [mlModels, setMlModels] = useState<ApiMLModel[]>([]);
   const [mlLoading, setMlLoading] = useState(true);
   const [mlError, setMlError] = useState<string | null>(null);
+  const [experiences, setExperiences] = useState<WorkExperienceItem[]>([]);
 
   useEffect(() => {
     let isMounted = true;
+
+    async function fetchExperiences() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/experiences/`);
+        if (!response.ok) return;
+
+        const data: ApiExperience[] = await response.json();
+        if (isMounted && Array.isArray(data) && data.length > 0) {
+          setExperiences(data);
+        }
+      } catch {
+        // Keep empty state if API is unavailable.
+      }
+    }
 
     async function fetchProjects() {
       try {
@@ -156,7 +198,7 @@ function App() {
         const mappedCards: CardItem[] = data.map((project) => ({
           title: project.title,
           text: project.description,
-          img: normalizeImageUrl(project.image),
+          img: PROJECT_IMAGES[project.title] ?? normalizeImageUrl(project.image),
           links: project.links,
           stat: project.stat,
         }));
@@ -193,6 +235,7 @@ function App() {
       }
     }
 
+    fetchExperiences();
     fetchProjects();
     fetchMLModels();
     return () => {
@@ -240,10 +283,21 @@ function App() {
         items={aboutItems}
       />
 
+      <section id="experience" className="section-gray">
+        <div className="container">
+          <span className="section-eyebrow">02 · Experience</span>
+          <h2>Work Experience</h2>
+          <p className="section-lead">
+            Professional roles spanning aerospace software engineering, academic research, and full-stack development.
+          </p>
+          <WorkExperience experiences={experiences} />
+        </div>
+      </section>
+
       <Section
         id="publications"
-        className="section-gray"
-        eyebrow="02 · Research"
+        className="section-white"
+        eyebrow="03 · Research"
         title="Research & Publications"
         lead="Academic work at the intersection of formal language theory and music informatics, covering my master's thesis and a peer-reviewed paper."
         type="publications"
@@ -252,8 +306,8 @@ function App() {
 
       <Section
         id="projects"
-        className="section-white"
-        eyebrow="03 · Projects"
+        className="section-gray"
+        eyebrow="04 · Projects"
         title="Projects"
         lead="A selection of projects spanning game automation, computer vision, cloud infrastructure, and aerospace software."
         type="cards"

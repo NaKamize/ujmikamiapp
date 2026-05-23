@@ -14,17 +14,14 @@ MODELS_DATA = [
     {
         'title': 'Chatbot Arena — LLM Preference Classification',
         'description': (
-            'Baseline solution for the Kaggle "LLM Classification Finetuning" '
-            'competition. The task is to predict which chatbot response a user '
-            'would prefer (model_a, model_b, or tie) given a conversation turn. '
-            'The solution uses a fine-tuned DistilBERT model on conversation '
-            'text, parsing prompt/response pairs. A TF-IDF + chi-square feature '
-            'selection baseline was also implemented for comparison.'
+            'Finetune LLMs to predict human preference using Chatbot Arena '
+            'conversations. Implemented a fine-tuned DistilBERT baseline and '
+            'a TF-IDF + chi-square feature selection baseline for comparison.'
         ),
         'category': 'nlp',
         'architecture': 'DistilBERT (distilbert-base-uncased)',
         'framework': 'PyTorch + HuggingFace Transformers',
-        'competition_name': 'LLM Classification Finetuning (Chatbot Arena)',
+        'competition_name': 'LLM Classification Finetuning',
         'competition_url': 'https://www.kaggle.com/competitions/llm-classification-finetuning',
         'dataset_description': (
             'Conversation turns with prompt, response_a, and response_b text. '
@@ -33,7 +30,7 @@ MODELS_DATA = [
         'metrics': {
             'log_loss': 1.04331,
         },
-        'rank': '112 / 257',
+        'rank': '124 / 281',
         'score': '1.04331',
         'order': 1,
         'links': [
@@ -46,13 +43,9 @@ MODELS_DATA = [
     {
         'title': 'Disaster Tweets — NLP Classification',
         'description': (
-            'Kaggle "Natural Language Processing with Disaster Tweets" competition. '
-            'The goal is to predict whether a given tweet is about a real disaster '
-            'or not. The solution uses a hybrid ensemble approach: a fine-tuned '
-            'DeBERTa-v3 transformer combined with an XGBoost classifier trained on '
-            'hand-crafted linguistic features (uppercase ratio, hashtag counts, '
-            'sentiment scores, keyword frequency, etc.). The ensemble improves '
-            'over the standalone transformer by leveraging feature engineering.'
+            'Predict which tweets are about real disasters and which are not. '
+            'Uses a DeBERTa-v3 transformer combined with an XGBoost classifier '
+            'trained on hand-crafted linguistic features.'
         ),
         'category': 'nlp',
         'architecture': 'Microsoft DeBERTa-v3-base + XGBoost ensemble',
@@ -68,7 +61,7 @@ MODELS_DATA = [
             'best_threshold': 0.86,
             'ensemble_threshold': 0.84,
         },
-        'rank': '',
+        'rank': '355 / 727',
         'score': '',
         'order': 2,
         'links': [
@@ -81,13 +74,9 @@ MODELS_DATA = [
     {
         'title': 'Fashion-MNIST — Computer Vision Classification',
         'description': (
-            'Solution for the AI-Biz2026 workshop competition (associated with '
-            'JSAI-isAI 2026). The task is to classify Fashion-MNIST images (28×28 '
-            'grayscale) into 10 clothing categories. The approach uses a multi-seed '
-            'ensemble of ResNet-style CNNs designed for grayscale input, combined '
-            'with a specialist model that focuses on the most frequently confused '
-            'classes. Predictions from the base ensemble and the specialist are '
-            'fused for the final output. Achieved 3rd place on the leaderboard.'
+            'AI-Biz2026 Spring Task 3 competition. Classify Fashion-MNIST images '
+            'into 10 clothing categories using a multi-seed ensemble of ResNet-style '
+            'CNNs with a specialist model for confused classes.'
         ),
         'category': 'cv',
         'architecture': 'ResNet-style CNN (grayscale) + specialist ensemble',
@@ -101,9 +90,8 @@ MODELS_DATA = [
         ),
         'metrics': {
             'accuracy': 0.94220,
-            'leaderboard_position': 3,
         },
-        'rank': '3 / ~30',
+        'rank': '5 / 27',
         'score': '0.94220',
         'order': 3,
         'links': [
