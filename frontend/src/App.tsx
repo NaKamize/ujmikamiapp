@@ -282,17 +282,15 @@ function App() {
         type="about"
         items={aboutItems}
       />
-
-      <section id="experience" className="section-gray">
-        <div className="container">
-          <span className="section-eyebrow">02 · Experience</span>
-          <h2>Work Experience</h2>
-          <p className="section-lead">
-            Professional roles spanning aerospace software engineering, academic research, and full-stack development.
-          </p>
-          <WorkExperience experiences={experiences} />
-        </div>
-      </section>
+      
+      <Section 
+        id="experience"
+        className="section-gray"
+        eyebrow="02 · Experience"
+        title="Work Experiences"
+        type="experience"
+        experiences={experiences}
+      />
 
       <Section
         id="publications"

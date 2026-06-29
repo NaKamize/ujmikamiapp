@@ -1,5 +1,6 @@
 import Card from './Card';
 import Item from './Item';
+import WorkExperience from './WorkExperience';
 import './Sections.css';
 
 interface Link {
@@ -32,7 +33,22 @@ interface Publication {
   links?: Link[];
 }
 
-type SectionType = 'cards' | 'about' | 'publications';
+interface TechBadge {
+  label: string;
+}
+
+interface Experience {
+  id: number;
+  company: string;
+  role: string;
+  period: string;
+  location: string;
+  description: string;
+  technologies: TechBadge[];
+  current?: boolean;
+}
+
+type SectionType = 'cards' | 'about' | 'publications' | 'experience';
 
 interface SectionProps {
   id: string;
@@ -44,9 +60,10 @@ interface SectionProps {
   cards?: CardItem[];
   items?: AboutItem[];
   publications?: Publication[];
+  experiences?: Experience[];
 }
 
-export default function Section({ id, title, lead, cards = [], items = [], publications = [], className, type, eyebrow }: SectionProps) {
+export default function Section({ id, title, lead, cards = [], items = [], publications = [], experiences = [], className, type, eyebrow }: SectionProps) {
   return (
     <section id={id} className={className}>
       <div className="container">
@@ -68,6 +85,10 @@ export default function Section({ id, title, lead, cards = [], items = [], publi
               <Item key={i} icon={item.icon} img={item.img} title={item.title} text={item.text} />
             ))}
           </div>
+        )}
+
+        {type === 'experience' && (
+            <WorkExperience experiences={experiences} />
         )}
 
         {type === 'publications' && (
