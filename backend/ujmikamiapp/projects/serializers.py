@@ -49,5 +49,5 @@ class ResearchPublicationSerializer(serializers.ModelSerializer):
         model = Publication
         fields = [
             'title', 'authors', 'project', 'badge',
-            'subtitule', 'venue', 'description', 'links'
+            'subtitle', 'venue', 'description', 'links'
         ]

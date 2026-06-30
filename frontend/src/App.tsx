@@ -22,7 +22,7 @@ interface AboutItem {
   text: string;
 }
 
-interface Publication {
+interface ApiPublication {
   badge: string;
   title: string;
   subtitle?: string;
@@ -97,34 +97,6 @@ const aboutItems: AboutItem[] = [
   },
 ];
 
-const publications: Publication[] = [
-  {
-    badge: "IT SPY 2025",
-    title: "Výpočetná muzikológia: modely, metódy a aplikácie",
-    subtitle: "Computational Musicology: Models, Methods and Applications",
-    authors: "Jozef Makiš, supervised by prof. RNDr. Alexandr Meduna, CSc.",
-    venue: "VUT FIT Brno · IT SPY 2025 competition (best student IT projects in CZ & SK)",
-    description:
-      "Master's thesis selected for the IT SPY competition. The work explores the intersection of formal grammar systems and music theory, defining models and methods for computational musicology: parsing symbolic music and generating orchestrations using multi-generative grammar systems.",
-    links: [
-      { label: "IT SPY entry", url: "https://www.itspy.cz/sk/thesis/vypocetna-muzikologia-modely-metody-a-aplikacie/" },
-    ],
-  },
-  {
-    badge: "arXiv 2025",
-    title: "Orchestration of Music by Grammar Systems",
-    authors: "Jozef Makiš, Alexander Meduna, Zbyněk Křivka · VUT FIT Brno",
-    venue: "EPTCS 422, 2025, pp. 45–58 · Formal Languages & Automata Theory (cs.FL)",
-    description:
-      "We define multi-generative rule-synchronized scattered-context grammar systems (without erasing rules) and demonstrate how to simultaneously arrange a musical composition for a full orchestra consisting of several instruments. Classical and jazz orchestration examples are provided, followed by five open problem areas related to this approach.",
-    links: [
-      { label: "arXiv:2507.15314", url: "https://arxiv.org/abs/2507.15314" },
-      { label: "PDF", url: "https://arxiv.org/pdf/2507.15314" },
-      { label: "DOI 10.4204/EPTCS.422.4", url: "https://doi.org/10.4204/EPTCS.422.4" },
-    ],
-  },
-];
-
 const skills: string[] = [
   'Formal Grammars', 'Music Informatics', 'Computer Vision',
   'Microsoft Azure', 'Information Systems', 'Python', 'Aerospace & Avionics',
@@ -165,6 +137,7 @@ function App() {
   const [mlLoading, setMlLoading] = useState(true);
   const [mlError, setMlError] = useState<string | null>(null);
   const [experiences, setExperiences] = useState<WorkExperienceItem[]>([]);
+  const [publications, setPublications] = useState<ApiPublication[]>([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -209,6 +182,23 @@ function App() {
       }
     }
 
+    async function fetchPublications() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/publications/`);
+        if (!response.ok) {
+          return;
+        }
+
+        const data: ApiPublication[] = await response.json();
+        if (!isMounted || !Array.isArray(data) || data.length === 0) {
+          return;
+        }
+        setPublications(data)
+      } catch {
+        // Keep static fallback if API is unavailable.
+      }
+    }
+
     async function fetchMLModels() {
       try {
         const response = await fetch(`${API_BASE_URL}/api/ml-models/`);
@@ -237,6 +227,7 @@ function App() {
 
     fetchExperiences();
     fetchProjects();
+    fetchPublications();
     fetchMLModels();
     return () => {
       isMounted = false;
