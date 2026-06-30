@@ -11,90 +11,87 @@ from projects.models import Project, ProjectLink, Tag
 
 
 TAGS_DATA = [
-    {'name': 'Game Automation'},
-    {'name': 'Azure'},
-    {'name': 'DevOps'},
-    {'name': 'Aerospace'},
-    {'name': 'Formal Grammars'},
-    {'name': 'Image Processing'},
-    {'name': 'Music Informatics'},
     {'name': 'Python'},
-    {'name': 'Computer Vision'},
-    {'name': 'JavaScript'},
     {'name': 'Data Engineering'},
-    {'name': 'Transfer Learning'},
+    {'name': 'Azure'},
+    {'name': 'Computer Vision'},
+    {'name': 'Machine Learning'},
+    {'name': 'Full-Stack'},
+    {'name': 'React'},
+    {'name': 'Django REST'},
+    {'name': 'Hardware Testing'},
+    {'name': 'Music Informatics'},
+    {'name': 'Formal Grammars'},
 ]
 
 PROJECTS_DATA = [
     {
-        'title': 'ACARS Onboarding Maintenance System',
+        'title': 'Hardware Onboarding Maintenance System Testing',
         'description': (
-            'Avionics automation and testing for ACARS-based onboard maintenance '
-            'systems. Built test harnesses, simulated aircraft bus data, and '
-            'automated regression suites for DO-178C compliant avionics software.'
+            'Built and maintained system test suites for an onboarding '
+            'maintenance system running on custom hardware. '
+            'Utilized internal Python frameworks to verify hardware-level behavior '
+            'and supported root cause investigation.'
         ),
-        'category': 'aerospace',
+        'category': 'testing',
         'image': '',
-        'stat': 'DO-178C · automated test pipelines',
+        'stat': 'Python · Hardware Validation',
         'order': 1,
-        'tag_names': ['Aerospace', 'Python', 'DevOps'],
+        'tag_names': ['Hardware Testing', 'Python'],
         'links': [],
     },
     {
         'title': 'Azure Data Pipelines & Infrastructure',
         'description': (
-            'Built data pipelines with Azure Databricks and Data Factory. '
-            'Deployed infrastructure via Terraform, automated CI/CD with '
-            'GitHub Actions. Focus on reliable, repeatable cloud deployments.'
+            'Developed workflows for a cloud enterprise information system in Microsoft Azure. '
+            'Migrated legacy U-SQL jobs into PySpark and Databricks workflows, '
+            'and implemented routine data processing and validation using SQL.'
         ),
         'category': 'cloud',
         'image': 'projects/microsoft_azure.png',
-        'stat': 'Databricks · Data Factory · Terraform',
+        'stat': 'Databricks · PySpark · Azure',
         'order': 2,
-        'tag_names': ['Azure', 'Data Engineering', 'DevOps'],
+        'tag_names': ['Azure', 'Data Engineering', 'Python'],
         'links': [],
     },
     {
-        'title': 'U-Net Image Upscaling with Transfer Learning',
+        'title': 'Computer Vision: Upscaling & Tracking',
         'description': (
-            'Applied transfer learning with U-Net and Stable Diffusion for '
-            'image upscaling. Fine-tuned pre-trained models on domain-specific '
-            'datasets to improve resolution while preserving fine details.'
+            'Completed applied computer vision projects utilizing Stable Diffusion '
+            'for image upscaling and YOLO for vehicle speed estimation and tracking. '
+            'Leveraged OpenCV for core image and video processing tasks.'
         ),
         'category': 'cv',
         'image': '',
-        'stat': 'U-Net · Stable Diffusion · transfer learning',
+        'stat': 'Stable Diffusion · YOLO · OpenCV',
         'order': 3,
-        'tag_names': ['Computer Vision', 'Image Processing', 'Transfer Learning', 'Python'],
+        'tag_names': ['Computer Vision', 'Machine Learning', 'Python'],
         'links': [],
     },
     {
-        'title': 'GrepolisBot — Game Automation Userscript',
+        'title': 'Personal Portfolio Platform',
         'description': (
-            'Tampermonkey userscript for Grepolis. Automates farming, culture '
-            'celebrations, silver vault management, and attack dodging. '
-            'Draggable panel UI. Built with ES modules and esbuild.'
+            'Designed and built a full-stack portfolio application using React and TypeScript '
+            'on the frontend with a Django REST backend. '
+            'Configured APIs for project management and deployed locally using Docker Compose.'
         ),
-        'category': 'automation',
+        'category': 'fullstack',
         'image': '',
-        'stat': '71 installs · 4 automation modules',
+        'stat': 'React · TypeScript · Django REST',
         'order': 4,
-        'tag_names': ['Game Automation', 'JavaScript', 'DevOps'],
-        'links': [
-            {'label': 'GreasyFork', 'url': 'https://greasyfork.org/en/scripts/468760-grepolisbot'},
-            {'label': 'GitHub Repo', 'url': 'https://github.com/NaKamize/GrepolisBot'},
-        ],
+        'tag_names': ['Full-Stack', 'React', 'Django REST', 'Python'],
+        'links': [],
     },
     {
-        'title': 'Music Grammar Orchestrator',
+        'title': 'Computational Musicology & Grammar Systems',
         'description': (
-            'Generates multi-instrument orchestrations using multi-generative '
-            'grammar systems. Takes a symbolic melody and produces a full '
-            'orchestral score. Published at EPTCS 2025.'
+            'Master\'s thesis selected among top student IT projects in CZ and SK (IT SPY 2025). '
+            'Generates multi-instrument orchestrations using multi-generative grammar systems. '
+            'Co-authored publication "Orchestration of Music by Grammar Systems".'
         ),
         'category': 'ml',
         'image': '',
-        'stat': 'EPTCS 422 · arXiv:2507.15314',
+        'stat': 'IT SPY 2025 · EPTCS 422',
         'order': 5,
         'tag_names': ['Formal Grammars', 'Music Informatics', 'Python'],
         'links': [

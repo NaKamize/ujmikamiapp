@@ -24,6 +24,8 @@ services:
       dockerfile: Dockerfile
     env_file:
       - ./backend/ujmikamiapp/.env
+    volumes:
+      - ./backend/ujmikamiapp:/app
     depends_on:
       db:
         condition: service_healthy
@@ -37,6 +39,9 @@ services:
       dockerfile: Dockerfile
       args:
         REACT_APP_API_BASE_URL: ""
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     depends_on:
       - backend
     ports:

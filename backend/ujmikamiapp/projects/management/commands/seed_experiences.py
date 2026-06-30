@@ -12,68 +12,68 @@ from projects.models import WorkExperience, WorkExperienceTechnology
 
 EXPERIENCES_DATA = [
     {
-        'company': 'Aerospace & Avionics Company',
-        'role': 'Software Engineer',
-        'period': '2024 – Present',
-        'location': 'Slovakia / Remote',
+        'company': 'Honeywell',
+        'role': 'Software Engineer I',
+        'period': 'Jul 2024 – Present',
+        'location': 'Brno, Czech Republic',
         'description': (
-            'Developing and maintaining safety-critical avionics software. '
-            'Working across embedded systems and ground-support tooling, '
-            'contributing to DO-178C compliant pipelines and automated test '
-            'infrastructure.'
+            'I work on system test suites for an onboarding maintenance system running '
+            'on custom hardware. I utilize internal Python frameworks to verify behavior '
+            'at the hardware level and support failure analysis and root cause investigation '
+            'across both software and hardware.'
         ),
         'current': True,
         'order': 1,
         'technologies': [
             {'label': 'Python'},
-            {'label': 'C/C++'},
-            {'label': 'DO-178C'},
-            {'label': 'CI/CD'},
-            {'label': 'Linux'},
+            {'label': 'SQL'},
+            {'label': 'REST API'},
+            {'label': 'Linux'}, 
+            {'label': 'Testing'},
         ],
     },
     {
-        'company': 'VUT FIT Brno — Research',
-        'role': "Master's Researcher / Teaching Assistant",
-        'period': '2022 – 2024',
+        'company': 'Anthology Inc.',
+        'role': 'Software Developer Intern',
+        'period': 'Apr 2023 – Apr 2024',
         'location': 'Brno, Czech Republic',
         'description': (
-            'Conducted research at the intersection of formal language theory '
-            'and computational musicology. Co-authored a peer-reviewed paper on '
-            'multi-generative grammar systems for music orchestration (EPTCS 2025). '
-            'Assisted in lecturing and lab sessions for formal languages and '
-            'automata courses.'
+            'I worked on a cloud enterprise information system within Microsoft Azure. '
+            'My main responsibilities included migrating legacy U-SQL jobs into PySpark '
+            'and Databricks workflows, using SQL daily for data processing and validation, '
+            'and supporting the backend data workflow implementation.'
         ),
         'current': False,
         'order': 2,
         'technologies': [
             {'label': 'Python'},
-            {'label': 'Formal Grammars'},
-            {'label': 'Music Informatics'},
-            {'label': 'LaTeX'},
-            {'label': 'Research'},
+            {'label': 'PySpark'},
+            {'label': 'Databricks'},
+            {'label': 'Azure'},
+            {'label': 'SQL'},
         ],
     },
     {
-        'company': 'Freelance / Open Source',
-        'role': 'Full-Stack Developer',
-        'period': '2021 – Present',
-        'location': 'Remote',
+        'company': 'Independent Research & Projects',
+        'role': 'Graduate Researcher & Developer',
+        'period': '2022 – Present',
+        'location': 'Brno, Czech Republic',
         'description': (
-            'Built full-stack web applications and automation scripts for '
-            'various clients. Projects span game automation (browser userscripts '
-            'with 1 000+ users on GreasyFork), computer-vision pipelines, cloud '
-            'deployments on Microsoft Azure, and this portfolio.'
+            'I developed a Master\'s thesis on Computational Musicology that was recognized '
+            'among the top student IT projects in Czechia and Slovakia in the IT SPY 2025 competition, '
+            'and co-authored an international scientific publication on music grammar systems (EPTCS 422). '
+            'In my free time, I continue to build personal software projects, including designing and '
+            'developing a full-stack Personal Portfolio Platform using React, TypeScript, and Django REST.'
         ),
         'current': False,
         'order': 3,
         'technologies': [
+            {'label': 'Python'},
             {'label': 'React'},
             {'label': 'TypeScript'},
-            {'label': 'Django'},
-            {'label': 'Azure'},
-            {'label': 'Docker'},
-            {'label': 'PostgreSQL'},
+            {'label': 'Django REST'},
+            {'label': 'Docker Compose'},
+            {'label': 'Formal Grammars'},
         ],
     },
 ]
