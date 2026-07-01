@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .models import Project, WorkExperience, Publication
-from .serializers import ProjectSerializer, WorkExperienceSerializer, ResearchPublicationSerializer
+from .models import Project, WorkExperience, Publication, AboutItem
+from .serializers import ProjectSerializer, WorkExperienceSerializer, ResearchPublicationSerializer, AboutItemSerializer
 
 
 class ProjectListView(generics.ListAPIView):
@@ -31,3 +31,9 @@ class ResearchPublicationsView(generics.ListAPIView):
     """GET /api/publications/ - returns all research and publications."""
     serializer_class = ResearchPublicationSerializer
     queryset = Publication.objects.all()
+
+
+class AboutItemView(generics.ListAPIView):
+    """GET /api/about/ — returns all about items ordered."""
+    serializer_class = AboutItemSerializer
+    queryset = AboutItem.objects.all()

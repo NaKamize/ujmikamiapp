@@ -79,3 +79,24 @@ class Publication(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class AboutItem(models.Model):
+    icon = models.CharField(
+        max_length=50,
+        help_text="Emoji or icon identifier (e.g., 🧑‍💻 or fa-graduation-cap)"
+    )
+    title = models.CharField(max_length=100)
+    text = models.TextField()
+    order = models.PositiveIntegerField(
+        default=0,
+        help_text="Display order (lower = first)"
+    )
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = "About Item"
+        verbose_name_plural = "About Items"
+
+    def __str__(self):
+        return self.title

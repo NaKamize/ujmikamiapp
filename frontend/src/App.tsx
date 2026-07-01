@@ -22,6 +22,13 @@ interface AboutItem {
   text: string;
 }
 
+interface ApiAboutItem {
+  icon: string;
+  title: string;
+  text: string;
+  order: number;
+}
+
 interface ApiPublication {
   badge: string;
   title: string;
@@ -79,23 +86,6 @@ interface ApiMLModel {
   links: Link[];
 }
 
-const aboutItems: AboutItem[] = [
-  {
-    icon: '\u{1F9D1}\u200D\u{1F4BB}',
-    title: 'Who am I?',
-    text: "I'm a Slovak software developer with a background in computer science research, currently working in aerospace and avionics. I build things: research prototypes, automation scripts, full-stack applications and cloud systems.",
-  },
-  {
-    icon: '\u{1F393}',
-    title: 'Education',
-    text: "Master's degree (Ing.) from the Faculty of Information Technology, Brno University of Technology (VUT FIT). My studies covered formal grammars, music informatics, machine learning, computer vision and AI. My thesis sits at the intersection of formal language theory and computational musicology.",
-  },
-  {
-    icon: '\u{1F3B5}',
-    title: 'Interests',
-    text: 'Music informatics, computer vision, formal language theory, game automation, aerospace & avionics systems, and building tools that make repetitive work disappear.',
-  },
-];
 
 const skills: string[] = [
   'Formal Grammars', 'Music Informatics', 'Computer Vision',
@@ -138,6 +128,7 @@ function App() {
   const [mlError, setMlError] = useState<string | null>(null);
   const [experiences, setExperiences] = useState<WorkExperienceItem[]>([]);
   const [publications, setPublications] = useState<ApiPublication[]>([]);
+  const [aboutmeitems, setAboutMeItem] = useState<ApiAboutItem[]>([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -199,6 +190,23 @@ function App() {
       }
     }
 
+    async function fetchAboutMe() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/about/`);
+        if (!response.ok) {
+          return;
+        }
+
+        const data: ApiAboutItem[] = await response.json();
+        if (!isMounted || !Array.isArray(data) || data.length === 0) {
+          return;
+        }
+        setAboutMeItem(data)
+      } catch {
+        // Keep static fallback if API is unavailable.
+      }
+    }
+
     async function fetchMLModels() {
       try {
         const response = await fetch(`${API_BASE_URL}/api/ml-models/`);
@@ -229,6 +237,7 @@ function App() {
     fetchProjects();
     fetchPublications();
     fetchMLModels();
+    fetchAboutMe();
     return () => {
       isMounted = false;
     };
@@ -271,7 +280,7 @@ function App() {
         eyebrow="01 · About"
         title="About Me"
         type="about"
-        items={aboutItems}
+        items={aboutmeitems}
       />
       
       <Section 

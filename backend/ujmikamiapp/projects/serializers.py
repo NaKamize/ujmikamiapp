@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Project, ProjectLink, Tag, WorkExperience, WorkExperienceTechnology, Publication
+from .models import Project, ProjectLink, Tag, WorkExperience, WorkExperienceTechnology, Publication, AboutItem
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -50,4 +50,12 @@ class ResearchPublicationSerializer(serializers.ModelSerializer):
         fields = [
             'title', 'authors', 'project', 'badge',
             'subtitle', 'venue', 'description', 'links'
+        ]
+
+
+class AboutItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AboutItem
+        fields = [
+            'title', 'icon', 'text', 'order'
         ]
