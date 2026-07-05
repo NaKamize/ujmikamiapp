@@ -32,6 +32,7 @@ jobs:
         env:
           NPM_CONFIG_LEGACY_PEER_DEPS: true
           CI: false
+          REACT_APP_API_BASE_URL: "https://ujmikamiapp-env.kindbush-72762bde.westus2.azurecontainerapps.io"
 
   build_and_deploy_backend:
     if: github.event_name == 'push'
