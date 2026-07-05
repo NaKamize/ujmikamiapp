@@ -51,6 +51,7 @@ jobs:
         with:
           acrName: ujmikamiacr
           containerAppName: ujmikamiapp-env
+          containerAppEnvironment: ujmikamiapp-env-env
           resourceGroup: ujmikamiapp2
           appSourcePath: ${{ github.workspace }}/backend/ujmikamiapp
           dockerfilePath: Dockerfile
