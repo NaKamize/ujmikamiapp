@@ -52,9 +52,10 @@ jobs:
           acrName: ujmikamiacr
           containerAppName: ujmikamiapp-env
           resourceGroup: ujmikamiapp2
-          
           appSourcePath: ${{ github.workspace }}/backend/ujmikamiapp
           dockerfilePath: Dockerfile
+          acrUsername: ujmikamiacr
+          acrPassword: ${{ secrets.ACR_PASSWORD }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
