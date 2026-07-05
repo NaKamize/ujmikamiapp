@@ -13,7 +13,6 @@ if [ "$PRODUCTION" != "true" ]; then
     python manage.py seed_aboutme
 fi
 
-# Rozhodnutie o serveri
 if [ "$PRODUCTION" = "true" ]; then
     echo "Starting Gunicorn..."
     exec gunicorn --bind 0.0.0.0:8000 ujmikamiapp.wsgi:application
