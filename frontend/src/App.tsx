@@ -9,17 +9,11 @@ import Section from './components/Section';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import MLShowcase from './components/MLShowcase';
-import WorkExperience, { WorkExperienceItem } from './components/WorkExperience';
+import { WorkExperienceItem } from './components/WorkExperience';
 
 interface Link {
   label: string;
   url: string;
-}
-
-interface AboutItem {
-  icon: string;
-  title: string;
-  text: string;
 }
 
 interface ApiAboutItem {
