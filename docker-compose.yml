@@ -22,6 +22,8 @@ services:
     build:
       context: ./backend/ujmikamiapp
       dockerfile: Dockerfile
+    environment:
+      - PRODUCTION=false
     env_file:
       - ./backend/ujmikamiapp/.env
     volumes:
