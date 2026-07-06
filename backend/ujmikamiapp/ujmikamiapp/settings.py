@@ -24,10 +24,8 @@ environ.Env.read_env(BASE_DIR / '.env')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
@@ -45,6 +43,7 @@ INSTALLED_APPS = [
     # Third-party
     'rest_framework',
     'corsheaders',
+    'storages',
     # Local
     'api',
     'projects',
@@ -121,12 +120,23 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
+USE_AZURE_STORAGE = env('PRODUCTION', default='false')
 
-STATIC_URL = 'static/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+if USE_AZURE_STORAGE == 'false':
+    STATIC_URL = 'static/'
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
+else:
+    DEFAULT_FILE_STORAGE = 'storages.backends.azure.AzureStorage'
+    STATICFILES_STORAGE = 'storages.backends.azure.AzureStorage'
+
+    AZURE_ACCOUNT_NAME = env('AZURE_ACCOUNT_NAME')
+    AZURE_ACCOUNT_KEY = env('AZURE_ACCOUNT_KEY')
+    AZURE_CONTAINER_MEDIA = 'media'
+    AZURE_CONTAINER_STATIC = 'static'
+
+    MEDIA_URL = f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/{AZURE_CONTAINER_MEDIA}/"
+    STATIC_URL = f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/{AZURE_CONTAINER_STATIC}/"
 
 # CORS
 CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[])
