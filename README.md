@@ -1,128 +1,64 @@
-# ujmikamiapp
+# Portfolio: Software Engineering & Machine Learning
 
-Personal portfolio site — React frontend + Django REST API.
+Vitajte na mojom osobnom portfóliu. Tento web slúži ako prezentácia mojich projektov v oblasti softvérového inžinierstva a strojového učenia, ktoré som vyvinul ako súčasť mojej cesty za pokročilým vývojom backend systémov a modelov.
 
-## Stack
+Aplikáciu si môžete pozrieť na adrese: https://zealous-bay-04c9a6603.7.azurestaticapps.net/.
 
-- **Frontend:** React 19 + TypeScript
-- **Backend:** Django 6 + Django REST Framework + SQLite
-- **Deployment:** Docker Compose (backend on `:8000`, frontend on `:3000`)
+## O projekte
 
-## Quick Start
+Táto platforma spája moderný frontend s robustným backendom. Frontend je postavený na React 19 v kombinácii s TypeScriptom, zatiaľ čo backend využíva Django 6 a Django REST Framework na efektívne spravovanie dát a API komunikáciu.
+
+## Technologický stack
+
+Frontend: React 19, TypeScript
+Backend: Django 6, Django REST Framework, SQLite
+Nasadenie: Docker Compose
+
+## Inštalácia a spustenie
+
+Pre spustenie lokálnej verzie projektu postupujte nasledovne:
 
 ### Backend
 
-```bash
+Prejdite do zložky backendu a pripravte si virtuálne prostredie:
 cd backend/ujmikamiapp
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-# Migrate + seed
+Následne spustite migráciu databázy a naplňte ju dátami:
 python manage.py migrate
 python manage.py seed_ml_models
-
-# Run
 python manage.py runserver
-```
 
 ### Frontend
 
-```bash
+V zložke frontend nainštalujte závislosti a spustite vývojový server:
 cd frontend
 npm install
 REACT_APP_API_BASE_URL=http://localhost:8000 npm start
-```
 
-Opens on `http://localhost:3000`.
-
-### Docker
-
-```bash
+Pre komplexné spustenie pomocou Dockeru môžete použiť príkaz:
 docker compose up --build
-```
 
----
+## Prehľad API
 
-## API Endpoints
+Projekt obsahuje REST API rozhranie pre správu projektov a modelov strojového učenia.
 
-### Projects
+### Projekty
 
-| Method | Path                     | Description                  |
-|--------|--------------------------|------------------------------|
-| GET    | `/api/projects/`         | List all portfolio projects  |
-| GET    | `/api/projects/<id>/`    | Single project detail        |
+GET /api/projects/: Zoznam všetkých projektov
+GET /api/projects/<id>/: Detail konkrétneho projektu
 
-Optional query param: `?category=ml` to filter by category.
+### Strojové učenie
 
-### ML Models (new)
+GET /api/ml-models/: Prehľad mojich projektov v oblasti ML
+GET /api/ml-models/<id>/: Detail modelu vrátane metrík a leaderboardu
 
-| Method | Path                      | Description                           |
-|--------|---------------------------|---------------------------------------|
-| GET    | `/api/ml-models/`         | List all ML model showcase entries    |
-| GET    | `/api/ml-models/<id>/`    | Single ML model detail with metrics   |
+## ML Modely
 
-**Example:**
+Integrovaná podpora pre seeding modelov umožňuje jednoduchú správu obsahu. V súčasnosti projekt obsahuje:
+Chatbot Arena (predikcia preferencií LLM)
+Klasifikácia tweetov o katastrofách
+Fashion-MNIST (úspešný projekt v súťaži AI-Biz2026)
 
-```bash
-curl http://localhost:8000/api/ml-models/
-curl http://localhost:8000/api/ml-models/1/
-```
-
-Response shape (list):
-
-```json
-[
-  {
-    "id": 1,
-    "title": "Chatbot Arena — LLM Preference Classification",
-    "description": "…",
-    "category": "nlp",
-    "category_display": "NLP & Text",
-    "architecture": "DistilBERT (distilbert-base-uncased)",
-    "framework": "PyTorch + HuggingFace Transformers",
-    "competition_name": "LLM Classification Finetuning (Chatbot Arena)",
-    "competition_url": "https://…",
-    "dataset_description": "…",
-    "metrics": { "log_loss": 1.04331 },
-    "rank": "112 / 257",
-    "score": "1.04331",
-    "image": null,
-    "links": [
-      { "id": 1, "label": "Competition Page", "url": "https://…" }
-    ],
-    "order": 1,
-    "created_at": "2026-05-16T…"
-  }
-]
-```
-
----
-
-## Seeding ML Models
-
-```bash
-cd backend/ujmikamiapp
-python manage.py seed_ml_models          # replace all entries
-python manage.py seed_ml_models --clear-only  # delete all entries only
-```
-
-The seed command populates 3 entries:
-
-| # | Project                                    | Domain      | Model                            |
-|---|--------------------------------------------|-------------|----------------------------------|
-| 1 | Chatbot Arena (LLM preference prediction)  | NLP         | DistilBERT + TF-IDF baseline     |
-| 2 | Disaster Tweets classification             | NLP         | DeBERTa-v3 + XGBoost ensemble    |
-| 3 | Fashion-MNIST (AI-Biz2026)                 | CV          | ResNet CNN + specialist ensemble |
-
-Each entry includes competition links, notebook URLs, metrics, and leaderboard rank.
-
----
-
-## Testing
-
-```bash
-cd backend/ujmikamiapp
-python manage.py test ml_models
-```
-
-Tests cover both list and detail API endpoints.
+Pre spustenie testov backendovej časti použite príkaz python manage.py test ml_models v zložke backendu.
