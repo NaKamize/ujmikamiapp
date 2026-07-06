@@ -7,4 +7,4 @@ mysqlclient==2.2.7
 pillow==12.2.0
 sqlparse==0.5.5
 gunicorn
-django-storages
+django-storages[azure]
