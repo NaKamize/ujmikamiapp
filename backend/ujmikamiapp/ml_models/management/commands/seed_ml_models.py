@@ -12,36 +12,37 @@ from ml_models.models import MLModel, MLModelLink
 
 MODELS_DATA = [
     {
-        'title': 'Chatbot Arena — LLM Preference Classification',
+        'title': 'Chatbot Arena: DeBERTa-GBDT Hybrid Pipeline',
         'description': (
-            'Finetune LLMs to predict human preference using Chatbot Arena '
-            'conversations. Implemented a fine-tuned DistilBERT baseline and '
-            'a TF-IDF + chi-square feature selection baseline for comparison.'
+            'Advanced LLM preference prediction pipeline combining a fine-tuned '
+            'DeBERTa-v3-large backbone with a GBDT-based meta-stacking architecture. '
+            'Leverages test-time augmentation (TTA) and engineered structural '
+            'features to improve classification robustness.'
         ),
         'category': 'nlp',
-        'architecture': 'DistilBERT (distilbert-base-uncased)',
-        'framework': 'PyTorch + HuggingFace Transformers',
+        'architecture': 'DeBERTa-v3-large + LightGBM/XGBoost/CatBoost Ensemble',
+        'framework': 'PyTorch + HuggingFace Transformers + Scikit-Learn',
         'competition_name': 'LLM Classification Finetuning',
         'competition_url': 'https://www.kaggle.com/competitions/llm-classification-finetuning',
         'dataset_description': (
-            'Conversation turns with prompt, response_a, and response_b text. '
-            'Multi-class classification: model_a wins, model_b wins, or tie.'
+            'Chatbot Arena conversation turns; multi-class classification for '
+            'model preference (model_a, model_b, tie).'
         ),
         'metrics': {
             'log_loss': 1.04331,
         },
-        'rank': '124 / 281',
-        'score': '1.04331',
+        'rank': 108,
+        'total_teams': 253,
+        'score': 1.04331,
         'order': 1,
         'links': [
             {'label': 'Competition Page', 'url': 'https://www.kaggle.com/competitions/llm-classification-finetuning'},
-            {'label': 'DistilBERT Notebook', 'url': 'https://github.com/NaKamize/chatbot_arena/blob/main/distilbert_preference_model/distil-bert.ipynb'},
-            {'label': 'TF-IDF Baseline Notebook', 'url': 'https://github.com/NaKamize/chatbot_arena/blob/main/td-idf-log-reg-baseline.ipynb'},
+            {'label': 'DeBERTa Pipeline Notebook', 'url': 'https://github.com/NaKamize/chatbot_arena/blob/main/chatbot-arena.ipynb'},
             {'label': 'GitHub Repo', 'url': 'https://github.com/NaKamize/chatbot_arena'},
         ],
     },
     {
-        'title': 'Disaster Tweets — NLP Classification',
+        'title': 'Disaster Tweets, NLP Classification',
         'description': (
             'Predict which tweets are about real disasters and which are not. '
             'Uses a DeBERTa-v3 transformer combined with an XGBoost classifier '
@@ -58,11 +59,13 @@ MODELS_DATA = [
             'mentions, URLs, punctuation ratios, and sentiment polarity.'
         ),
         'metrics': {
-            'best_threshold': 0.86,
-            'ensemble_threshold': 0.84,
+            'best_threshold': 0.44,
+            'ensemble_threshold': 0.44,
+            'f1_score': 0.8613,
+            'accuracy': 0.8791,
         },
         'rank': '355 / 727',
-        'score': '',
+        'score': '0.8613',
         'order': 2,
         'links': [
             {'label': 'Competition Page', 'url': 'https://www.kaggle.com/competitions/nlp-getting-started'},
@@ -72,34 +75,45 @@ MODELS_DATA = [
         ],
     },
     {
-        'title': 'Fashion-MNIST — Computer Vision Classification',
-        'description': (
-            'AI-Biz2026 Spring Task 3 competition. Classify Fashion-MNIST images '
-            'into 10 clothing categories using a multi-seed ensemble of ResNet-style '
-            'CNNs with a specialist model for confused classes.'
-        ),
-        'category': 'cv',
-        'architecture': 'ResNet-style CNN (grayscale) + specialist ensemble',
-        'framework': 'TensorFlow / Keras',
-        'competition_name': 'AI-Biz2026 Fashion-MNIST Classification',
-        'competition_url': 'https://www.kaggle.com/competitions/ai-biz-2026-spring-task-3',
-        'dataset_description': (
-            'Fashion-MNIST: 70,000 grayscale images (28×28) across 10 classes: '
-            'T-shirt/top, Trouser, Pullover, Dress, Coat, Sandal, Shirt, Sneaker, '
-            'Bag, Ankle boot. 60k train / 10k test split in CSV format.'
-        ),
-        'metrics': {
-            'accuracy': 0.94220,
+        "title": "Fashion-MNIST, Computer Vision Classification",
+        "description": "AI-Biz2026 Spring Task 3 competition. Achieved a top-tier rank by classifying Fashion-MNIST images using a multi-seed ensemble of ResNet-style CNNs with Squeeze-and-Excitation (SE) channel attention blocks. The architecture is optimized for 28×28 native resolution, utilizing Test-Time Augmentation (TTA) and specialized training to improve texture-based discrimination.",
+        "architecture": "ResNet-style CNN with SE blocks; 5-seed ensemble for variance reduction.",
+        "framework": "TensorFlow / Keras",
+        "competition_name": "AI-Biz2026 Fashion-MNIST Classification",
+        "dataset_description": "Fashion-MNIST: 70,000 grayscale images (28×28) across 10 clothing categories.",
+        "metrics": {
+            "accuracy": 0.95560
         },
-        'rank': '5 / 27',
-        'score': '0.94220',
-        'order': 3,
-        'links': [
-            {'label': 'Competition Page', 'url': 'https://www.kaggle.com/competitions/ai-biz-2026-spring-task-3'},
-            {'label': 'Colab Notebook (main pipeline)', 'url': 'https://colab.research.google.com/drive/1r6s5XDZGa_L8_YHZZ0MZgjth9-kxHdvX?usp=drive_link'},
-            {'label': 'GitHub Repo', 'url': 'https://github.com/NaKamize/AIBiz-2026-spring'},
-        ],
+        "rank": "3 / 38",
+        "order": 3,
+        "links": [
+            {'label': 'GitHub Repo', 'url': 'https://github.com/NaKamize/ai-biz2026-classifier'},
+            {'label': 'Competition Page', 'url': 'https://www.kaggle.com/competitions/ai-biz-2026-spring-task-3/overview'}
+        ]
     },
+    {
+        'title': '3-LC Multi-Vehicle Detection Challenge',
+        'description': (
+            'A computer vision challenge focused on multi-vehicle detection. '
+            'The primary difficulty involved extensive data preprocessing and '
+            'cleaning, though limited time prevented deep refinement of the '
+            'dataset, which was the core focus of this competition.'
+        ),
+        'category': 'computer-vision',
+        'architecture': 'YOLO-based detection pipeline',
+        'framework': 'PyTorch + Ultralytics',
+        'competition_name': '3-LC Multi-Vehicle Detection Challenge',
+        'competition_url': 'https://www.kaggle.com/competitions/3-lc-multi-vehicle-detection-challenge',
+        'metrics': {
+            'score': 0.81188,
+        },
+        'rank': '43 / 97',
+        'order': 4,
+        'links': [
+            {'label': 'Competition Page', 'url': 'https://www.kaggle.com/competitions/3-lc-multi-vehicle-detection-challenge'},
+            {'label': 'GitHub Repository', 'url': 'https://github.com/NaKamize/3lc-multi-vehicle-detecion'},
+        ],
+}
 ]
 
 
