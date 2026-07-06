@@ -131,6 +131,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # CORS
 CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[])
 
+CSRF_TRUSTED_ORIGINS = ['https://ujmikamiapp-env.kindbush-72762bde.westus2.azurecontainerapps.io']
+
 # Django REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [

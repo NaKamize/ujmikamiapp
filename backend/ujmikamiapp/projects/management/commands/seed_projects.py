@@ -22,6 +22,9 @@ TAGS_DATA = [
     {'name': 'Hardware Testing'},
     {'name': 'Music Informatics'},
     {'name': 'Formal Grammars'},
+    {'name': 'Web Scraping'},
+    {'name': 'TypeScript'}
+
 ]
 
 PROJECTS_DATA = [
@@ -34,7 +37,7 @@ PROJECTS_DATA = [
             'and supported root cause investigation.'
         ),
         'category': 'testing',
-        'image': '',
+        'image': 'projects/plane.jpg',
         'stat': 'Python · Hardware Validation',
         'order': 1,
         'tag_names': ['Hardware Testing', 'Python'],
@@ -62,7 +65,7 @@ PROJECTS_DATA = [
             'Leveraged OpenCV for core image and video processing tasks.'
         ),
         'category': 'cv',
-        'image': '',
+        'image': 'projects/mozaika_comparison_2.png',
         'stat': 'Stable Diffusion · YOLO · OpenCV',
         'order': 3,
         'tag_names': ['Computer Vision', 'Machine Learning', 'Python'],
@@ -90,7 +93,7 @@ PROJECTS_DATA = [
             'Co-authored publication "Orchestration of Music by Grammar Systems".'
         ),
         'category': 'ml',
-        'image': '',
+        'image': 'projects/music.png',
         'stat': 'IT SPY 2025 · EPTCS 422',
         'order': 5,
         'tag_names': ['Formal Grammars', 'Music Informatics', 'Python'],
@@ -99,6 +102,23 @@ PROJECTS_DATA = [
             {'label': 'GitHub Repo', 'url': 'https://github.com/NaKamize/music-grammar-orchestrator'},
         ],
     },
+    {
+        'title': 'Grepolis Game Bot',
+        'description': (
+            'Designed and implemented automated bot for the web-based strategy game Grepolis. '
+            'Currently it has the biggest popularity in slovak game scene with 77 downloads and more. '
+            'Application is built within tempermonkey extension using typescript. '
+        ),
+        'category': 'fullstack',
+        'image': 'projects/grepolisbot_preview.png',
+        'stat': 'Typescript, Web Scraping, Web Development',
+        'order': 6,
+        'tag_names': ['Web Scraping', 'Typescript'],
+        'links': [
+            {'label': 'Geasyfork', 'url': 'https://greasyfork.org/en/scripts/468760-grepolisbot'},
+            {'label': 'GitHub Repo', 'url': 'https://github.com/NaKamize/GrepolisBot'},
+        ],
+    }
 ]
 
 
