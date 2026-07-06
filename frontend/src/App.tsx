@@ -1,9 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import avatar from './assets/avatar.jpeg';
-import unetImg from './assets/UNet-En.png';
-import grepolisImg from './assets/grepolisbot_preview.png';
-import musicImg from './assets/music.png';
 import Section from './components/Section';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
@@ -85,15 +82,6 @@ const skills: string[] = [
   'Microsoft Azure', 'Information Systems', 'Python', 'Aerospace & Avionics',
 ];
 
-/* Maps project titles from the API to local asset imports.
-   When a project matches, the bundled asset is used instead of the API image URL. */
-const PROJECT_IMAGES: Record<string, string> = {
-  'Azure Data Pipelines & Infrastructure': azureImg,
-  'U-Net Image Upscaling with Transfer Learning': unetImg,
-  'GrepolisBot — Game Automation Userscript': grepolisImg,
-  'Music Grammar Orchestrator': musicImg,
-};
-
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL ?? 'http://localhost:8000';
 
 function normalizeImageUrl(img?: string | null): string | undefined {
@@ -155,7 +143,7 @@ function App() {
         const mappedCards: CardItem[] = data.map((project) => ({
           title: project.title,
           text: project.description,
-          img: PROJECT_IMAGES[project.title] ?? normalizeImageUrl(project.image),
+          img: normalizeImageUrl(project.image),
           links: project.links,
           stat: project.stat,
         }));
