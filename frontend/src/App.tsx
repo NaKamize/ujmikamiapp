@@ -1,7 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import avatar from './assets/avatar.jpeg';
-import azureImg from './assets/microsoft_azure.png';
 import unetImg from './assets/UNet-En.png';
 import grepolisImg from './assets/grepolisbot_preview.png';
 import musicImg from './assets/music.png';
