@@ -7,6 +7,8 @@ Usage:
 """
 
 from django.core.management.base import BaseCommand
+from django.core.files import File
+from pathlib import Path
 from projects.models import Project, ProjectLink, Tag
 
 
@@ -125,6 +127,19 @@ PROJECTS_DATA = [
 class Command(BaseCommand):
     help = 'Seeds the database with project entries.'
 
+    @staticmethod
+    def _upload_project_image(project, image_path):
+        if not image_path:
+            return
+
+        project_root = Path(__file__).resolve().parents[3]
+        local_image_path = project_root / 'media' / image_path
+        if not local_image_path.exists():
+            return
+
+        with local_image_path.open('rb') as image_file:
+            project.image.save(local_image_path.name, File(image_file), save=True)
+
     def add_arguments(self, parser):
         parser.add_argument(
             '--clear-only',
@@ -156,7 +171,9 @@ class Command(BaseCommand):
         for data in PROJECTS_DATA:
             tag_names = data.pop('tag_names', [])
             links = data.pop('links', [])
+            image_path = data.pop('image', '')
             project = Project.objects.create(**data)
+            self._upload_project_image(project, image_path)
             for tag_name in tag_names:
                 if tag_name in tag_map:
                     project.tags.add(tag_map[tag_name])
