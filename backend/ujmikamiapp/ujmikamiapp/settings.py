@@ -129,8 +129,8 @@ if USE_AZURE_STORAGE == 'false':
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
 else:
-    DEFAULT_FILE_STORAGE = 'storages.backends.azure.AzureStorage'
-    STATICFILES_STORAGE = 'storages.backends.azure.AzureStorage'
+    DEFAULT_FILE_STORAGE = 'myproject.storage_backends.MediaStorage'
+    STATICFILES_STORAGE = 'myproject.storage_backends.StaticStorage'
 
     AZURE_ACCOUNT_NAME = env('AZURE_ACCOUNT_NAME')
     AZURE_ACCOUNT_KEY = env('AZURE_ACCOUNT_KEY')

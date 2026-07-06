@@ -6,3 +6,4 @@
 .opencode/
 .mypy_cache/
 *.swp
+azure.txt
