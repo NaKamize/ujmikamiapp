@@ -122,16 +122,21 @@ USE_TZ = True
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-USE_AZURE_STORAGE = env('PRODUCTION', default='false')
+USE_AZURE_STORAGE = env.bool('PRODUCTION', default=False)
 
-if USE_AZURE_STORAGE == 'false':
+if not USE_AZURE_STORAGE:
     STATIC_URL = 'static/'
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
+    STORAGES = {
+        'default': {
+            'BACKEND': 'django.core.files.storage.FileSystemStorage',
+        },
+        'staticfiles': {
+            'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+        },
+    }
 else:
-    DEFAULT_FILE_STORAGE = 'myproject.storage_backends.MediaStorage'
-    STATICFILES_STORAGE = 'myproject.storage_backends.StaticStorage'
-
     AZURE_ACCOUNT_NAME = env('AZURE_ACCOUNT_NAME')
     AZURE_ACCOUNT_KEY = env('AZURE_ACCOUNT_KEY')
     AZURE_CONTAINER_MEDIA = 'media'
@@ -139,6 +144,14 @@ else:
 
     MEDIA_URL = f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/{AZURE_CONTAINER_MEDIA}/"
     STATIC_URL = f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/{AZURE_CONTAINER_STATIC}/"
+    STORAGES = {
+        'default': {
+            'BACKEND': 'ujmikamiapp.storage_backends.MediaStorage',
+        },
+        'staticfiles': {
+            'BACKEND': 'ujmikamiapp.storage_backends.StaticStorage',
+        },
+    }
 
 # CORS
 CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[])
