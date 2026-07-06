@@ -31,9 +31,8 @@ MODELS_DATA = [
         'metrics': {
             'log_loss': 1.04331,
         },
-        'rank': 108,
-        'total_teams': 253,
-        'score': 1.04331,
+        'rank': '108 / 253',
+        'score': '1.04331',
         'order': 1,
         'links': [
             {'label': 'Competition Page', 'url': 'https://www.kaggle.com/competitions/llm-classification-finetuning'},
@@ -99,7 +98,7 @@ MODELS_DATA = [
             'cleaning, though limited time prevented deep refinement of the '
             'dataset, which was the core focus of this competition.'
         ),
-        'category': 'computer-vision',
+        'category': 'cv',
         'architecture': 'YOLO-based detection pipeline',
         'framework': 'PyTorch + Ultralytics',
         'competition_name': '3-LC Multi-Vehicle Detection Challenge',
@@ -113,7 +112,7 @@ MODELS_DATA = [
             {'label': 'Competition Page', 'url': 'https://www.kaggle.com/competitions/3-lc-multi-vehicle-detection-challenge'},
             {'label': 'GitHub Repository', 'url': 'https://github.com/NaKamize/3lc-multi-vehicle-detecion'},
         ],
-}
+    },
 ]
 
 
@@ -138,9 +137,20 @@ class Command(BaseCommand):
         MLModel.objects.all().delete()
         self.stdout.write('Cleared existing ML models.')
 
+        allowed_fields = {field.name for field in MLModel._meta.fields}
+
         for data in MODELS_DATA:
             links = data.pop('links', [])
-            model = MLModel.objects.create(**data)
+            unknown_fields = [key for key in data.keys() if key not in allowed_fields]
+            if unknown_fields:
+                self.stdout.write(
+                    self.style.WARNING(
+                        f"Ignoring unknown fields for '{data.get('title', 'unknown')}': {', '.join(unknown_fields)}"
+                    )
+                )
+
+            clean_data = {key: value for key, value in data.items() if key in allowed_fields}
+            model = MLModel.objects.create(**clean_data)
             for link_data in links:
                 MLModelLink.objects.create(model=model, **link_data)
             self.stdout.write(self.style.SUCCESS(f'  ✓ {model.title}'))
