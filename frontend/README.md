@@ -1,70 +1,64 @@
-# Getting Started with Create React App
+# Portfolio: Software Engineering & Machine Learning
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Vitajte na mojom osobnom portfóliu. Tento web slúži ako prezentácia mojich projektov v oblasti softvérového inžinierstva a strojového učenia, ktoré som vyvinul ako súčasť mojej cesty za pokročilým vývojom backend systémov a modelov.
 
-## Available Scripts
+Aplikáciu si môžete pozrieť na adrese: https://zealous-bay-04c9a6603.7.azurestaticapps.net/.
 
-In the project directory, you can run:
+## O projekte
 
-### `npm start`
+Táto platforma spája moderný frontend s robustným backendom. Frontend je postavený na React 19 v kombinácii s TypeScriptom, zatiaľ čo backend využíva Django 6 a Django REST Framework na efektívne spravovanie dát a API komunikáciu.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Technologický stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Frontend: React 19, TypeScript
+Backend: Django 6, Django REST Framework, SQLite
+Nasadenie: Docker Compose
 
-### `npm test`
+## Inštalácia a spustenie
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Pre spustenie lokálnej verzie projektu postupujte nasledovne:
 
-### `npm run build`
+### Backend
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Prejdite do zložky backendu a pripravte si virtuálne prostredie:
+cd backend/ujmikamiapp
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Následne spustite migráciu databázy a naplňte ju dátami:
+python manage.py migrate
+python manage.py seed_ml_models
+python manage.py runserver
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Frontend
 
-### `npm run eject`
+V zložke frontend nainštalujte závislosti a spustite vývojový server:
+cd frontend
+npm install
+REACT_APP_API_BASE_URL=http://localhost:8000 npm start
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Pre komplexné spustenie pomocou Dockeru môžete použiť príkaz:
+docker compose up --build
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Prehľad API
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Projekt obsahuje REST API rozhranie pre správu projektov a modelov strojového učenia.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Projekty
 
-## Learn More
+GET /api/projects/: Zoznam všetkých projektov
+GET /api/projects/<id>/: Detail konkrétneho projektu
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Strojové učenie
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+GET /api/ml-models/: Prehľad mojich projektov v oblasti ML
+GET /api/ml-models/<id>/: Detail modelu vrátane metrík a leaderboardu
 
-### Code Splitting
+## ML Modely
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Integrovaná podpora pre seeding modelov umožňuje jednoduchú správu obsahu. V súčasnosti projekt obsahuje:
+Chatbot Arena (predikcia preferencií LLM)
+Klasifikácia tweetov o katastrofách
+Fashion-MNIST (úspešný projekt v súťaži AI-Biz2026)
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Pre spustenie testov backendovej časti použite príkaz python manage.py test ml_models v zložke backendu.
