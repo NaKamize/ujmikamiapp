@@ -1,27 +1,27 @@
-import os
+import asyncio
+import logging
 import uuid
+from pathlib import Path
 
-import chromadb
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
-from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
-CHROMA_HOST = os.environ.get("CHROMA_HOST", "chroma-db")
-CHROMA_PORT = int(os.environ.get("CHROMA_PORT", "8000"))
-COLLECTION_NAME = "portfolio_projects"
-EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
+from config.logging import configure_logging
+from config.settings import settings
+from services.chroma_service import chroma_service
+from services.embedding_service import embedding_service
 
-# Most docs in ./data are hands-on project write-ups; a few (like the CV) span
-# both project and academic content and are tagged "both" so agent.py's
-# intent-filtered retrieval surfaces them for either intent.
+logger = logging.getLogger(__name__)
+
+DATA_DIR = Path(__file__).resolve().parent / "data"
+
 CATEGORY_OVERRIDES = {
     "cv.md": "both",
 }
 
 
 def load_documents():
-    loader = DirectoryLoader(DATA_DIR, glob="**/*.md", loader_cls=TextLoader)
+    loader = DirectoryLoader(str(DATA_DIR), glob="**/*.md", loader_cls=TextLoader)
     return loader.load()
 
 
@@ -29,36 +29,31 @@ def split_documents(documents):
     splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     chunks = splitter.split_documents(documents)
     for chunk in chunks:
-        filename = os.path.basename(chunk.metadata.get("source", ""))
+        filename = Path(chunk.metadata.get("source", "")).name
         chunk.metadata["category"] = CATEGORY_OVERRIDES.get(filename, "project")
     return chunks
 
 
-def main():
+async def main() -> None:
+    configure_logging()
+
     documents = load_documents()
-    print(f"Loaded {len(documents)} document(s) from {DATA_DIR}")
+    logger.info("Loaded %d document(s) from %s", len(documents), DATA_DIR)
 
     chunks = split_documents(documents)
-    print(f"Split into {len(chunks)} chunk(s)")
+    logger.info("Split into %d chunk(s)", len(chunks))
 
-    embeddings = HuggingFaceEmbeddings(
-        model_name=EMBEDDING_MODEL,
-        model_kwargs={"device": "cpu"},
-    )
-    vectors = embeddings.embed_documents([chunk.page_content for chunk in chunks])
+    vectors = await embedding_service.embed_documents([chunk.page_content for chunk in chunks])
 
-    client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
-    client.delete_collection(COLLECTION_NAME)
-    collection = client.get_or_create_collection(COLLECTION_NAME)
-
-    collection.add(
+    await chroma_service.reseed_collection(
+        collection_name=settings.chroma_collection_name,
         ids=[str(uuid.uuid4()) for _ in chunks],
         documents=[chunk.page_content for chunk in chunks],
         embeddings=vectors,
         metadatas=[chunk.metadata for chunk in chunks],
     )
-    print(f"Seeded {len(chunks)} chunk(s) into Chroma collection '{COLLECTION_NAME}'")
+    logger.info("Seeded %d chunk(s) into Chroma collection '%s'", len(chunks), settings.chroma_collection_name)
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
