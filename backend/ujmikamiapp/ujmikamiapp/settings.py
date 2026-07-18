@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -85,9 +86,13 @@ WSGI_APPLICATION = 'ujmikamiapp.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': env.db(default=f'mysql://ujmikamiapp:ujmikamiapp@127.0.0.1:3306/ujmikamiapp'),
+    'default': env.db(default='mysql://ujmikamiapp:ujmikamiapp@127.0.0.1:3306/ujmikamiapp'),
 }
-DATABASES['default']['OPTIONS'] = {'ssl': {'ca': '/etc/ssl/certs/ca-certificates.crt'}}
+# Azure's managed MySQL requires a verified SSL connection; local/CI MySQL containers use a
+# self-signed cert that can never validate against the system CA bundle, so only force this in
+# production (same PRODUCTION flag used for USE_AZURE_STORAGE below).
+if env.bool('PRODUCTION', default=False):
+    DATABASES['default']['OPTIONS'] = {'ssl': {'ca': '/etc/ssl/certs/ca-certificates.crt'}}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators

@@ -1,5 +1,6 @@
-from django.urls import path, include
-from projects.views import WorkExperienceListView, ResearchPublicationsView, AboutItemView
+from django.urls import include, path
+
+from projects.views import AboutItemView, ResearchPublicationsView, WorkExperienceListView
 
 urlpatterns = [
     path('projects/', include('projects.urls')),

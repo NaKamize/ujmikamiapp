@@ -6,11 +6,11 @@ Usage:
     python manage.py seed_projects --clear-only
 """
 
-from django.core.management.base import BaseCommand
-from django.core.files import File
 from pathlib import Path
-from projects.models import Project, ProjectLink, Tag
 
+from django.core.management.base import BaseCommand
+
+from projects.models import Project, ProjectLink, Tag
 
 TAGS_DATA = [
     {'name': 'Python'},
@@ -128,7 +128,7 @@ class Command(BaseCommand):
     help = 'Seeds the database with project entries.'
 
     @staticmethod
-    def _upload_project_image(project, image_path):
+    def _set_project_image(project, image_path):
         if not image_path:
             return
 
@@ -137,8 +137,12 @@ class Command(BaseCommand):
         if not local_image_path.exists():
             return
 
-        with local_image_path.open('rb') as image_file:
-            project.image.save(local_image_path.name, File(image_file), save=True)
+        # The seed images already live at their final MEDIA_ROOT location (image_path matches
+        # the model's upload_to path), so point the field at them directly instead of copying
+        # through storage — copying made Django see a name collision with the source file
+        # itself and append a random suffix, accumulating a new duplicate on every reseed.
+        project.image.name = image_path
+        project.save(update_fields=['image'])
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -173,7 +177,7 @@ class Command(BaseCommand):
             links = data.pop('links', [])
             image_path = data.pop('image', '')
             project = Project.objects.create(**data)
-            self._upload_project_image(project, image_path)
+            self._set_project_image(project, image_path)
             for tag_name in tag_names:
                 if tag_name in tag_map:
                     project.tags.add(tag_map[tag_name])

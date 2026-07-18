@@ -7,8 +7,8 @@ Usage:
 """
 
 from django.core.management.base import BaseCommand
-from projects.models import AboutItem
 
+from projects.models import AboutItem
 
 ABOUT_ME_DATA = [
     {

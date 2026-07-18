@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Project, ProjectLink, Tag, WorkExperience, WorkExperienceTechnology, Publication
+
+from .models import Project, ProjectLink, Publication, Tag, WorkExperience, WorkExperienceTechnology
 
 
 class ProjectLinkInline(admin.TabularInline):

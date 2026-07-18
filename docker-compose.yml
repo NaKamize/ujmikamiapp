@@ -41,6 +41,7 @@ services:
       dockerfile: Dockerfile
       args:
         REACT_APP_API_BASE_URL: ""
+        REACT_APP_AI_SERVICE_URL: "http://localhost:8002"
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -50,5 +51,36 @@ services:
       - "3000:80"
     restart: unless-stopped
 
+  chroma-db:
+    image: chromadb/chroma:latest
+    environment:
+      - IS_PERSISTENT=TRUE
+      - PERSIST_DIRECTORY=/data
+    volumes:
+      - chroma_data:/data
+    ports:
+      - "8001:8000"
+    restart: unless-stopped
+
+  fastapi-ai:
+    build:
+      context: ./fastapi-ai
+      dockerfile: Dockerfile
+    environment:
+      - CHROMA_HOST=chroma-db
+      - CHROMA_PORT=8000
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./fastapi-ai:/app
+    depends_on:
+      - chroma-db
+    ports:
+      - "8002:8000"
+    restart: unless-stopped
+
 volumes:
   mysql_data:
+  chroma_data:

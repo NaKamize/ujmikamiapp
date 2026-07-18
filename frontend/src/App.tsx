@@ -5,6 +5,7 @@ import Section from './components/Section';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import MLShowcase from './components/MLShowcase';
+import ChatWidget from './components/ChatWidget';
 import { WorkExperienceItem } from './components/WorkExperience';
 
 interface Link {
@@ -300,6 +301,7 @@ function App() {
       />
 
       <Footer />
+      <ChatWidget />
     </div>
   );
 }

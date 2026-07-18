@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Project, ProjectLink, Tag, WorkExperience, WorkExperienceTechnology, Publication, AboutItem
+
+from .models import AboutItem, Project, ProjectLink, Publication, Tag, WorkExperience, WorkExperienceTechnology
 
 
 class TagSerializer(serializers.ModelSerializer):
