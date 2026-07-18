@@ -1,8 +1,12 @@
+from unittest.mock import AsyncMock
+
 import pytest
 from fastapi.testclient import TestClient
 from httpx import ASGITransport, AsyncClient
 
-import main
+import api.routes as routes_module
+from main import app
+from services.chroma_service import ChromaServiceError
 
 
 class _FakeMessage:
@@ -36,34 +40,43 @@ class _FakeFailingGraph:
 
 @pytest.fixture(autouse=True)
 def fake_graph(monkeypatch):
-    monkeypatch.setattr(main, "graph", _FakeGraph())
+    monkeypatch.setattr(routes_module, "graph", _FakeGraph())
 
 
 def test_health():
-    client = TestClient(main.app)
+    client = TestClient(app)
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
 
 
-def test_chroma_health(monkeypatch):
-    class _FakeClient:
-        def __init__(self, *args, **kwargs):
-            pass
+async def test_chroma_health(monkeypatch):
+    fake_chroma = AsyncMock()
+    fake_chroma.heartbeat.return_value = 12345
+    monkeypatch.setattr(routes_module, "chroma_service", fake_chroma)
 
-        def heartbeat(self):
-            return 12345
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        response = await client.get("/chroma/health")
 
-    monkeypatch.setattr(main.chromadb, "HttpClient", _FakeClient)
-
-    client = TestClient(main.app)
-    response = client.get("/chroma/health")
     assert response.status_code == 200
     assert response.json() == {"heartbeat": 12345}
 
 
+async def test_chroma_health_returns_503_on_failure(monkeypatch):
+    fake_chroma = AsyncMock()
+    fake_chroma.heartbeat.side_effect = ChromaServiceError("down")
+    monkeypatch.setattr(routes_module, "chroma_service", fake_chroma)
+
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        response = await client.get("/chroma/health")
+
+    assert response.status_code == 503
+
+
 async def test_chat_streams_only_synthesize_response_tokens():
-    transport = ASGITransport(app=main.app)
+    transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         response = await client.post("/api/v1/chat", json={"query": "What is Jozef's background?"})
 
@@ -72,9 +85,9 @@ async def test_chat_streams_only_synthesize_response_tokens():
 
 
 async def test_chat_streams_error_message_on_agent_failure(monkeypatch):
-    monkeypatch.setattr(main, "graph", _FakeFailingGraph())
+    monkeypatch.setattr(routes_module, "graph", _FakeFailingGraph())
 
-    transport = ASGITransport(app=main.app)
+    transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         response = await client.post("/api/v1/chat", json={"query": "anything"})
 
@@ -83,6 +96,12 @@ async def test_chat_streams_error_message_on_agent_failure(monkeypatch):
 
 
 def test_chat_rejects_missing_query_field():
-    client = TestClient(main.app)
+    client = TestClient(app)
     response = client.post("/api/v1/chat", json={})
+    assert response.status_code == 422
+
+
+def test_chat_rejects_empty_query_string():
+    client = TestClient(app)
+    response = client.post("/api/v1/chat", json={"query": ""})
     assert response.status_code == 422
