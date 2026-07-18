@@ -7,8 +7,8 @@ Usage:
 """
 
 from django.core.management.base import BaseCommand
-from ml_models.models import MLModel, MLModelLink
 
+from ml_models.models import MLModel, MLModelLink
 
 MODELS_DATA = [
     {

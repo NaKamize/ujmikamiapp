@@ -1,6 +1,7 @@
 from rest_framework import generics
-from .models import Project, WorkExperience, Publication, AboutItem
-from .serializers import ProjectSerializer, WorkExperienceSerializer, ResearchPublicationSerializer, AboutItemSerializer
+
+from .models import AboutItem, Project, Publication, WorkExperience
+from .serializers import AboutItemSerializer, ProjectSerializer, ResearchPublicationSerializer, WorkExperienceSerializer
 
 
 class ProjectListView(generics.ListAPIView):

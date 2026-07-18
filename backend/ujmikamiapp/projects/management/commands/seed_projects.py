@@ -6,11 +6,12 @@ Usage:
     python manage.py seed_projects --clear-only
 """
 
-from django.core.management.base import BaseCommand
-from django.core.files import File
 from pathlib import Path
-from projects.models import Project, ProjectLink, Tag
 
+from django.core.files import File
+from django.core.management.base import BaseCommand
+
+from projects.models import Project, ProjectLink, Tag
 
 TAGS_DATA = [
     {'name': 'Python'},

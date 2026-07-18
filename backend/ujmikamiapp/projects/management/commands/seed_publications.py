@@ -8,8 +8,8 @@ Usage:
 """
 
 from django.core.management.base import BaseCommand
-from projects.models import Project, Publication
 
+from projects.models import Project, Publication
 
 PUBLICATIONS_DATA = [
     {

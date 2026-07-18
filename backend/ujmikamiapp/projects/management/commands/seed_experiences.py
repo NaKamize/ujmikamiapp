@@ -7,8 +7,8 @@ Usage:
 """
 
 from django.core.management.base import BaseCommand
-from projects.models import WorkExperience, WorkExperienceTechnology
 
+from projects.models import WorkExperience, WorkExperienceTechnology
 
 EXPERIENCES_DATA = [
     {
@@ -28,7 +28,7 @@ EXPERIENCES_DATA = [
             {'label': 'Python'},
             {'label': 'SQL'},
             {'label': 'REST API'},
-            {'label': 'Linux'}, 
+            {'label': 'Linux'},
             {'label': 'Testing'},
         ],
     },
