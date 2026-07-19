@@ -72,7 +72,7 @@ async def retrieve_context(state: AgentState) -> AgentState:
         documents = await chroma_service.query(
             collection_name=settings.chroma_collection_name,
             query_embedding=query_vector,
-            n_results=5,
+            n_results=8,
             where=where,
         )
     except (EmbeddingServiceError, ChromaServiceError) as exc:

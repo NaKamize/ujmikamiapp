@@ -26,7 +26,7 @@ def load_documents():
 
 
 def split_documents(documents):
-    splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+    splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=100)
     chunks = splitter.split_documents(documents)
     for chunk in chunks:
         filename = Path(chunk.metadata.get("source", "")).name
