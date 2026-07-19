@@ -1,5 +1,7 @@
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
+import langchain_ollama
+import langchain_openai
 import pytest
 
 from services.chroma_service import ChromaService, ChromaServiceError
@@ -56,3 +58,34 @@ async def test_embedding_service_wraps_errors():
 
     with pytest.raises(EmbeddingServiceError):
         await service.embed_query("hello")
+
+
+def test_llm_service_defaults_to_ollama():
+    service = LLMService()
+
+    assert isinstance(service._llm, langchain_ollama.ChatOllama)
+
+
+def test_llm_service_uses_azure_openai_when_selected():
+    service = LLMService(provider="azure_openai")
+
+    assert isinstance(service._llm, langchain_openai.AzureChatOpenAI)
+
+
+def test_llm_service_rejects_unknown_provider():
+    with pytest.raises(ValueError):
+        LLMService(provider="bedrock")
+
+
+async def test_chroma_service_embedded_mode_uses_sync_client():
+    service = ChromaService(mode="embedded")
+
+    fake_collection = MagicMock()
+    fake_collection.query.return_value = {"documents": [["chunk"]]}
+    fake_client = MagicMock()
+    fake_client.get_or_create_collection.return_value = fake_collection
+    service._client = fake_client
+
+    result = await service.query("some_collection", [0.1])
+
+    assert result == ["chunk"]

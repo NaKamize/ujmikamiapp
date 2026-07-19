@@ -34,9 +34,8 @@ def split_documents(documents):
     return chunks
 
 
-async def main() -> None:
-    configure_logging()
-
+async def run_ingest() -> None:
+    """Embed data/*.md and (re)seed the Chroma collection."""
     documents = load_documents()
     logger.info("Loaded %d document(s) from %s", len(documents), DATA_DIR)
 
@@ -56,4 +55,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    configure_logging()
+    asyncio.run(run_ingest())
