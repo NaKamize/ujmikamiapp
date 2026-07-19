@@ -15,3 +15,11 @@ htmlcov/
 frontend/coverage/
 
 frontend/build/
+
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/*.tfvars
+terraform/crash.log
+terraform/aztfexportResourceMapping.json
+terraform/aztfexportSkippedResources.txt
