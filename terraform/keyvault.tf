@@ -8,20 +8,16 @@ resource "azurerm_key_vault" "main" {
   sku_name                   = "standard"
   rbac_authorization_enabled = true
   soft_delete_retention_days = 7
-  # Off for now so the vault can be freely deleted/recreated during setup; flip to true
-  # once this is settled and you want protection against accidental/malicious deletion.
   purge_protection_enabled = false
 }
 
-# Lets Terraform (running as the current signed-in user/service principal) create and
-# manage secret values in the vault.
 resource "azurerm_role_assignment" "terraform_secrets_officer" {
+  for_each             = toset(var.terraform_operator_principal_ids)
   scope                = azurerm_key_vault.main.id
   role_definition_name = "Key Vault Secrets Officer"
-  principal_id          = data.azurerm_client_config.current.object_id
+  principal_id         = each.value
 }
 
-# Lets the Container App's managed identity read secret values at runtime.
 resource "azurerm_role_assignment" "container_app_secrets_user" {
   scope                = azurerm_key_vault.main.id
   role_definition_name = "Key Vault Secrets User"
@@ -42,8 +38,6 @@ resource "azurerm_key_vault_secret" "mysql_database_url" {
   depends_on   = [azurerm_role_assignment.terraform_secrets_officer]
 }
 
-# Sourced directly from the ACR resource's own computed attribute — no separate
-# variable needed, Azure does expose this one back via the API.
 resource "azurerm_key_vault_secret" "acr_admin_password" {
   name         = "acr-admin-password"
   value        = azurerm_container_registry.registries-ujmikamiacr0.admin_password

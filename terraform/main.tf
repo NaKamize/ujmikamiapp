@@ -117,6 +117,10 @@ resource "azurerm_container_app" "container_apps-ujmikamiapp_env0" {
       name                = "http-scaler"
     }
   }
+
+  lifecycle {
+    ignore_changes = [template[0].container[0].image]
+  }
 }
 resource "azurerm_container_app_environment" "managed_environments-ujmikamiapp_env_env0" {
   location                   = "westus2"
@@ -166,8 +170,6 @@ resource "azurerm_log_analytics_workspace" "workspaces-workspace_ujmikamiapp2_hm
   resource_group_name = azurerm_resource_group.resource_groups-ujmikamiapp20.name
 
   lifecycle {
-    # Not captured by the import (state has it null); the provider always wants to
-    # write an explicit value on first apply regardless of what we set here.
     ignore_changes = [local_authentication_enabled]
   }
 }
@@ -182,17 +184,13 @@ resource "azurerm_storage_container" "containers-media0" {
   container_access_type = "blob"
   name                  = "media"
   storage_account_id    = "/subscriptions/ffaa5a63-e63d-498f-9747-c1deed636ef4/resourceGroups/ujmikamiapp2/providers/Microsoft.Storage/storageAccounts/ujmikamiblob"
-  depends_on = [
-    # One of azurerm_storage_account.storage_accounts-ujmikamiblob0,azurerm_storage_account_queue_properties.queue_services-default0 (can't auto-resolve as their ids are identical)
-  ]
+  depends_on = []
 }
 resource "azurerm_storage_container" "containers-static0" {
   container_access_type = "blob"
   name                  = "static"
   storage_account_id    = "/subscriptions/ffaa5a63-e63d-498f-9747-c1deed636ef4/resourceGroups/ujmikamiapp2/providers/Microsoft.Storage/storageAccounts/ujmikamiblob"
-  depends_on = [
-    # One of azurerm_storage_account.storage_accounts-ujmikamiblob0,azurerm_storage_account_queue_properties.queue_services-default0 (can't auto-resolve as their ids are identical)
-  ]
+  depends_on = []
 }
 resource "azurerm_storage_account_queue_properties" "queue_services-default0" {
   storage_account_id = azurerm_storage_account.storage_accounts-ujmikamiblob0.id
@@ -214,10 +212,6 @@ resource "azurerm_static_web_app" "static_sites-ujmikamiapp0" {
   name              = "ujmikamiapp"
   repository_branch = "main"
   repository_url    = "https://github.com/NaKamize/ujmikamiapp"
-  # Azure never exposes the deployment token back via the API (write-only at creation),
-  # so aztfexport can't recover it. This placeholder only exists to satisfy the provider's
-  # "all three or none" validation; ignore_changes below means Terraform never tries to
-  # actually change the live GitHub Actions linkage using it.
   repository_token    = "unmanaged-see-lifecycle-block"
   resource_group_name = azurerm_resource_group.resource_groups-ujmikamiapp20.name
 
