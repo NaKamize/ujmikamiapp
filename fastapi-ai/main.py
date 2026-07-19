@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -7,7 +9,17 @@ from config.settings import settings
 
 configure_logging()
 
-app = FastAPI(title="ujmikamiapp AI service")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    if settings.chroma_mode == "embedded":
+        from ingest import run_ingest
+
+        await run_ingest()
+    yield
+
+
+app = FastAPI(title="ujmikamiapp AI service", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,

@@ -112,6 +112,40 @@ jobs:
       - name: Run tests
         run: pytest -v
 
+  build_and_deploy_fastapi_ai:
+    needs: test_fastapi_ai
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    name: Build and Deploy FastAPI AI Service
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to ACR
+        run: echo "${{ secrets.ACR_PASSWORD }}" | docker login ujmikamiacr.azurecr.io -u ujmikamiacr --password-stdin
+
+      - name: Build and push image
+        run: |
+          docker build \
+            -t ujmikamiacr.azurecr.io/fastapi-ai:latest \
+            -t ujmikamiacr.azurecr.io/fastapi-ai:${{ github.run_id }} \
+            fastapi-ai
+          docker push ujmikamiacr.azurecr.io/fastapi-ai:latest
+          docker push ujmikamiacr.azurecr.io/fastapi-ai:${{ github.run_id }}
+
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Roll out new image (if app exists)
+        run: |
+          if az containerapp show -n ujmikami-ai -g ujmikamiapp2 &>/dev/null; then
+            az containerapp update -n ujmikami-ai -g ujmikamiapp2 \
+              --image ujmikamiacr.azurecr.io/fastapi-ai:${{ github.run_id }}
+          else
+            echo "ujmikami-ai not created yet (terraform apply pending) - skipping rollout"
+          fi
+
   terraform_plan:
     if: github.event_name == 'pull_request' && github.event.action != 'closed'
     runs-on: ubuntu-latest
@@ -212,6 +246,7 @@ jobs:
           NPM_CONFIG_LEGACY_PEER_DEPS: true
           CI: false
           REACT_APP_API_BASE_URL: "https://ujmikamiapp-env.kindbush-72762bde.westus2.azurecontainerapps.io"
+          REACT_APP_AI_SERVICE_URL: "https://ujmikami-ai.kindbush-72762bde.westus2.azurecontainerapps.io"
 
   build_and_deploy_backend:
     needs: test_backend

@@ -12,14 +12,25 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(case_sensitive=False)
 
+    chroma_mode: str = "http"
     chroma_host: str = "chroma-db"
     chroma_port: int = 8000
+    chroma_ssl: bool = False
     chroma_collection_name: str = "portfolio_projects"
 
     embedding_model: str = "BAAI/bge-small-en-v1.5"
 
+    # Local provider for LLMs. Ollama is the default
+    llm_provider: str = "ollama"
+
     ollama_base_url: str = "http://host.docker.internal:11434"
     ollama_model: str = "qwen2.5-coder:7b"
+
+    # Only read when llm_provider == "azure_openai".
+    azure_openai_endpoint: str = ""
+    azure_openai_api_key: str = ""
+    azure_openai_deployment: str = "gpt-5.4-mini"
+    azure_openai_api_version: str = "2025-04-01-preview"
 
     cors_allowed_origins: str = "http://localhost:3000"
 
