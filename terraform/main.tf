@@ -117,6 +117,10 @@ resource "azurerm_container_app" "container_apps-ujmikamiapp_env0" {
       name                = "http-scaler"
     }
   }
+
+  lifecycle {
+    ignore_changes = [template[0].container[0].image]
+  }
 }
 resource "azurerm_container_app_environment" "managed_environments-ujmikamiapp_env_env0" {
   location                   = "westus2"

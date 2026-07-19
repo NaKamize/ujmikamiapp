@@ -12,9 +12,10 @@ resource "azurerm_key_vault" "main" {
 }
 
 resource "azurerm_role_assignment" "terraform_secrets_officer" {
+  for_each             = toset(var.terraform_operator_principal_ids)
   scope                = azurerm_key_vault.main.id
   role_definition_name = "Key Vault Secrets Officer"
-  principal_id          = data.azurerm_client_config.current.object_id
+  principal_id         = each.value
 }
 
 resource "azurerm_role_assignment" "container_app_secrets_user" {
