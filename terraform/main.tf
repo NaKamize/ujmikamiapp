@@ -42,8 +42,8 @@ resource "azurerm_container_app" "container_apps-ujmikamiapp_env0" {
     identity            = "System"
   }
   secret {
-    name                = "mysql-database-url"
-    key_vault_secret_id = azurerm_key_vault_secret.mysql_database_url.versionless_id
+    name                = "database-url"
+    key_vault_secret_id = azurerm_key_vault_secret.database_url.versionless_id
     identity            = "System"
   }
   secret {
@@ -54,7 +54,7 @@ resource "azurerm_container_app" "container_apps-ujmikamiapp_env0" {
   template {
     container {
       cpu    = 0.5
-      image  = "ujmikamiacr.azurecr.io/github-action/container-app:29661511091.1"
+      image  = "ujmikamiacr.azurecr.io/backend-hotfix:neon-cutover"
       memory = "1Gi"
       name   = "ujmikamiapp-env"
       env {
@@ -67,7 +67,7 @@ resource "azurerm_container_app" "container_apps-ujmikamiapp_env0" {
       }
       env {
         name        = "DATABASE_URL"
-        secret_name = "mysql-database-url"
+        secret_name = "database-url"
       }
       env {
         name        = "SECRET_KEY"
@@ -138,31 +138,6 @@ resource "azurerm_container_registry" "registries-ujmikamiacr0" {
   name                = "ujmikamiacr"
   resource_group_name = azurerm_resource_group.resource_groups-ujmikamiapp20.name
   sku                 = "Standard"
-}
-resource "azurerm_mysql_flexible_server" "flexible_servers-ujmikami_db0" {
-  location            = "westus2"
-  name                = "ujmikami-db"
-  resource_group_name = azurerm_resource_group.resource_groups-ujmikamiapp20.name
-}
-resource "azurerm_mysql_flexible_database" "databases-ujmikamiapp0" {
-  charset             = "utf8mb4"
-  collation           = "utf8mb4_0900_ai_ci"
-  name                = "ujmikamiapp"
-  resource_group_name = azurerm_resource_group.resource_groups-ujmikamiapp20.name
-  server_name         = "ujmikami-db"
-  depends_on = [
-    azurerm_mysql_flexible_server.flexible_servers-ujmikami_db0,
-  ]
-}
-resource "azurerm_mysql_flexible_server_firewall_rule" "firewall_rules-allow_all_azure_services_and_resources_within_azure_ips_2026_7_5_19_1_10" {
-  end_ip_address      = "0.0.0.0"
-  name                = "AllowAllAzureServicesAndResourcesWithinAzureIps_2026-7-5_19-1-1"
-  resource_group_name = azurerm_resource_group.resource_groups-ujmikamiapp20.name
-  server_name         = "ujmikami-db"
-  start_ip_address    = "0.0.0.0"
-  depends_on = [
-    azurerm_mysql_flexible_server.flexible_servers-ujmikami_db0,
-  ]
 }
 resource "azurerm_log_analytics_workspace" "workspaces-workspace_ujmikamiapp2_hm_um0" {
   location            = "westus2"
