@@ -1,5 +1,5 @@
-variable "mysql_admin_password" {
-  description = "Existing admin password for the ujmikami-db MySQL Flexible Server."
+variable "neon_database_url" {
+  description = "Full Postgres connection string for the Neon database (TF_VAR_neon_database_url)."
   type        = string
   sensitive   = true
 }

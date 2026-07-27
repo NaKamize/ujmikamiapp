@@ -31,9 +31,9 @@ resource "azurerm_key_vault_secret" "django_secret_key" {
   depends_on   = [azurerm_role_assignment.terraform_secrets_officer]
 }
 
-resource "azurerm_key_vault_secret" "mysql_database_url" {
-  name         = "mysql-database-url"
-  value        = "mysql://nakamize:${var.mysql_admin_password}@ujmikami-db.mysql.database.azure.com:3306/ujmikamiapp"
+resource "azurerm_key_vault_secret" "database_url" {
+  name         = "database-url"
+  value        = var.neon_database_url
   key_vault_id = azurerm_key_vault.main.id
   depends_on   = [azurerm_role_assignment.terraform_secrets_officer]
 }

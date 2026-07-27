@@ -1,17 +1,16 @@
 services:
   db:
-    image: mysql:8.0
+    image: postgres:16
     environment:
-      MYSQL_DATABASE: ujmikamiapp
-      MYSQL_USER: ujmikamiapp
-      MYSQL_PASSWORD: ujmikamiapp
-      MYSQL_ROOT_PASSWORD: rootpassword
+      POSTGRES_DB: ujmikamiapp
+      POSTGRES_USER: ujmikamiapp
+      POSTGRES_PASSWORD: ujmikamiapp
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "pg_isready", "-U", "ujmikamiapp"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -84,5 +83,5 @@ services:
     restart: unless-stopped
 
 volumes:
-  mysql_data:
+  postgres_data:
   chroma_data:
