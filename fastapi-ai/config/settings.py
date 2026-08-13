@@ -34,6 +34,10 @@ class Settings(BaseSettings):
 
     cors_allowed_origins: str = "http://localhost:3000"
 
+    chat_max_query_length: int = 1000
+    chat_rate_limit_requests: int = 5
+    chat_rate_limit_window_seconds: float = 60.0
+
     log_level: str = "INFO"
 
     @property

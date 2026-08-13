@@ -1,11 +1,12 @@
 import logging
 from collections.abc import AsyncIterator
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 
 from agents.graph import graph
 from agents.state import initial_state
+from api.rate_limit import chat_rate_limiter
 from api.schemas import ChatRequest, ChromaHealthResponse, HealthResponse
 from services.chroma_service import ChromaServiceError, chroma_service
 
@@ -44,7 +45,7 @@ async def _stream_answer_tokens(question: str) -> AsyncIterator[str]:
         yield f"\n\n[agent error: {exc}]"
 
 
-@router.post("/api/v1/chat")
+@router.post("/api/v1/chat", dependencies=[Depends(chat_rate_limiter)])
 async def chat(request: ChatRequest) -> StreamingResponse:
     logger.info("chat: received question=%r", request.query)
     return StreamingResponse(_stream_answer_tokens(request.query), media_type="text/plain")

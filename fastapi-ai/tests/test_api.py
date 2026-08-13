@@ -5,6 +5,8 @@ from fastapi.testclient import TestClient
 from httpx import ASGITransport, AsyncClient
 
 import api.routes as routes_module
+from api.rate_limit import chat_rate_limiter
+from config.settings import settings
 from main import app
 from services.chroma_service import ChromaServiceError
 
@@ -41,6 +43,13 @@ class _FakeFailingGraph:
 @pytest.fixture(autouse=True)
 def fake_graph(monkeypatch):
     monkeypatch.setattr(routes_module, "graph", _FakeGraph())
+
+
+@pytest.fixture(autouse=True)
+def reset_chat_rate_limiter():
+    chat_rate_limiter._hits.clear()
+    yield
+    chat_rate_limiter._hits.clear()
 
 
 def test_health():
@@ -105,3 +114,40 @@ def test_chat_rejects_empty_query_string():
     client = TestClient(app)
     response = client.post("/api/v1/chat", json={"query": ""})
     assert response.status_code == 422
+
+
+def test_chat_rejects_query_over_max_length():
+    client = TestClient(app)
+    oversized_query = "x" * (settings.chat_max_query_length + 1)
+    response = client.post("/api/v1/chat", json={"query": oversized_query})
+    assert response.status_code == 422
+
+
+async def test_chat_rate_limits_after_too_many_requests():
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        for _ in range(settings.chat_rate_limit_requests):
+            response = await client.post("/api/v1/chat", json={"query": "hi"})
+            assert response.status_code == 200
+
+        response = await client.post("/api/v1/chat", json={"query": "one too many"})
+
+    assert response.status_code == 429
+    assert "Retry-After" in response.headers
+
+
+async def test_chat_rate_limit_tracks_clients_independently():
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        for _ in range(settings.chat_rate_limit_requests):
+            response = await client.post(
+                "/api/v1/chat", json={"query": "hi"}, headers={"x-forwarded-for": "1.1.1.1"}
+            )
+            assert response.status_code == 200
+
+        # A different client IP has its own budget and isn't blocked by the one above.
+        response = await client.post(
+            "/api/v1/chat", json={"query": "hi"}, headers={"x-forwarded-for": "2.2.2.2"}
+        )
+
+    assert response.status_code == 200
