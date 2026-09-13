@@ -175,13 +175,13 @@ export default function MLShowcase({ models, loading, error }: MLShowcaseProps) 
 
         {loading && (
           <div className="ml-loading">
-            <span>Loading models…</span>
+            <span>Loading models. Backend may be waking up from cold start...</span>
           </div>
         )}
 
         {error && (
           <div className="ml-error">
-            <span>⚠ {error}</span>
+            <span>⚠ We could not load models yet ({error}). Backend may still be starting.</span>
           </div>
         )}
 

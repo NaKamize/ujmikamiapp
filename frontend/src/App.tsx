@@ -109,8 +109,16 @@ function App() {
   const [mlLoading, setMlLoading] = useState(true);
   const [mlError, setMlError] = useState<string | null>(null);
   const [experiences, setExperiences] = useState<WorkExperienceItem[]>([]);
+  const [experiencesLoading, setExperiencesLoading] = useState(true);
+  const [experiencesError, setExperiencesError] = useState<string | null>(null);
   const [publications, setPublications] = useState<ApiPublication[]>([]);
+  const [publicationsLoading, setPublicationsLoading] = useState(true);
+  const [publicationsError, setPublicationsError] = useState<string | null>(null);
   const [aboutmeitems, setAboutMeItem] = useState<ApiAboutItem[]>([]);
+  const [aboutLoading, setAboutLoading] = useState(true);
+  const [aboutError, setAboutError] = useState<string | null>(null);
+  const [projectsLoading, setProjectsLoading] = useState(true);
+  const [projectsError, setProjectsError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -118,14 +126,24 @@ function App() {
     async function fetchExperiences() {
       try {
         const response = await fetch(`${API_BASE_URL}/api/experiences/`);
-        if (!response.ok) return;
+        if (!response.ok) {
+          throw new Error(`Server responded with ${response.status}`);
+        }
 
         const data: ApiExperience[] = await response.json();
         if (isMounted && Array.isArray(data) && data.length > 0) {
           setExperiences(data);
         }
-      } catch {
-        // Keep empty state if API is unavailable.
+      } catch (err) {
+        if (isMounted) {
+          setExperiencesError(
+            err instanceof Error ? err.message : 'Failed to load experience data'
+          );
+        }
+      } finally {
+        if (isMounted) {
+          setExperiencesLoading(false);
+        }
       }
     }
 
@@ -133,7 +151,7 @@ function App() {
       try {
         const response = await fetch(`${API_BASE_URL}/api/projects/`);
         if (!response.ok) {
-          return;
+          throw new Error(`Server responded with ${response.status}`);
         }
 
         const data: ApiProject[] = await response.json();
@@ -150,8 +168,16 @@ function App() {
         }));
 
         setApiProjectCards(mappedCards);
-      } catch {
-        // Keep static fallback if API is unavailable.
+      } catch (err) {
+        if (isMounted) {
+          setProjectsError(
+            err instanceof Error ? err.message : 'Failed to load project data'
+          );
+        }
+      } finally {
+        if (isMounted) {
+          setProjectsLoading(false);
+        }
       }
     }
 
@@ -159,16 +185,24 @@ function App() {
       try {
         const response = await fetch(`${API_BASE_URL}/api/publications/`);
         if (!response.ok) {
-          return;
+          throw new Error(`Server responded with ${response.status}`);
         }
 
         const data: ApiPublication[] = await response.json();
         if (!isMounted || !Array.isArray(data) || data.length === 0) {
           return;
         }
-        setPublications(data)
-      } catch {
-        // Keep static fallback if API is unavailable.
+        setPublications(data);
+      } catch (err) {
+        if (isMounted) {
+          setPublicationsError(
+            err instanceof Error ? err.message : 'Failed to load publication data'
+          );
+        }
+      } finally {
+        if (isMounted) {
+          setPublicationsLoading(false);
+        }
       }
     }
 
@@ -176,16 +210,24 @@ function App() {
       try {
         const response = await fetch(`${API_BASE_URL}/api/about/`);
         if (!response.ok) {
-          return;
+          throw new Error(`Server responded with ${response.status}`);
         }
 
         const data: ApiAboutItem[] = await response.json();
         if (!isMounted || !Array.isArray(data) || data.length === 0) {
           return;
         }
-        setAboutMeItem(data)
-      } catch {
-        // Keep static fallback if API is unavailable.
+        setAboutMeItem(data);
+      } catch (err) {
+        if (isMounted) {
+          setAboutError(
+            err instanceof Error ? err.message : 'Failed to load about data'
+          );
+        }
+      } finally {
+        if (isMounted) {
+          setAboutLoading(false);
+        }
       }
     }
 
@@ -263,6 +305,8 @@ function App() {
         title="About Me"
         type="about"
         items={aboutmeitems}
+        loading={aboutLoading}
+        error={aboutError}
       />
       
       <Section 
@@ -272,6 +316,8 @@ function App() {
         title="Work Experiences"
         type="experience"
         experiences={experiences}
+        loading={experiencesLoading}
+        error={experiencesError}
       />
 
       <Section
@@ -282,6 +328,8 @@ function App() {
         lead="Academic work at the intersection of formal language theory and music informatics, covering my master's thesis and a peer-reviewed paper."
         type="publications"
         publications={publications}
+        loading={publicationsLoading}
+        error={publicationsError}
       />
 
       <Section
@@ -292,6 +340,8 @@ function App() {
         lead="A selection of projects spanning game automation, computer vision, cloud infrastructure, and aerospace software."
         type="cards"
         cards={displayedProjectCards}
+        loading={projectsLoading}
+        error={projectsError}
       />
 
       <MLShowcase

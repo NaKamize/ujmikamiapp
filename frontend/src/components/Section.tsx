@@ -61,9 +61,11 @@ interface SectionProps {
   items?: AboutItem[];
   publications?: Publication[];
   experiences?: Experience[];
+  loading?: boolean;
+  error?: string | null;
 }
 
-export default function Section({ id, title, lead, cards = [], items = [], publications = [], experiences = [], className, type, eyebrow }: SectionProps) {
+export default function Section({ id, title, lead, cards = [], items = [], publications = [], experiences = [], className, type, eyebrow, loading = false, error = null }: SectionProps) {
   return (
     <section id={id} className={className}>
       <div className="container">
@@ -71,7 +73,19 @@ export default function Section({ id, title, lead, cards = [], items = [], publi
         <h2>{title}</h2>
         {lead && <p className="section-lead">{lead}</p>}
 
-        {type === 'cards' && (
+        {loading && (
+          <div className="section-loading" role="status" aria-live="polite">
+            Loading content. Backend may be waking up from cold start...
+          </div>
+        )}
+
+        {!loading && error && (
+          <div className="section-error" role="status" aria-live="polite">
+            We could not load this section yet ({error}). Backend may still be starting. Please refresh in a few seconds.
+          </div>
+        )}
+
+        {!loading && !error && type === 'cards' && (
           <div className="cards-columns">
             {cards.map((c, i) => (
               <Card key={i} title={c.title} img={c.img} links={c.links} stat={c.stat}>{c.text}</Card>
@@ -79,7 +93,7 @@ export default function Section({ id, title, lead, cards = [], items = [], publi
           </div>
         )}
 
-        {type === 'about' && (
+        {!loading && !error && type === 'about' && (
           <div className="about-items">
             {items.map((item, i) => (
               <Item key={i} icon={item.icon} img={item.img} title={item.title} text={item.text} />
@@ -87,11 +101,11 @@ export default function Section({ id, title, lead, cards = [], items = [], publi
           </div>
         )}
 
-        {type === 'experience' && (
+        {!loading && !error && type === 'experience' && (
             <WorkExperience experiences={experiences} />
         )}
 
-        {type === 'publications' && (
+        {!loading && !error && type === 'publications' && (
           <div className="publications-list">
             {publications.map((pub, i) => (
               <div key={i} className="pub-card">

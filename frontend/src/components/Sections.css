@@ -56,6 +56,29 @@
   text-align: center;
 }
 
+.section-loading,
+.section-error {
+  max-width: 760px;
+  margin: 1rem auto 2.2rem;
+  padding: 0.9rem 1rem;
+  border-radius: 0.8rem;
+  text-align: center;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.section-loading {
+  color: #1e40af;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
+.section-error {
+  color: #9a3412;
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+}
+
 /* ── About items ─────────────────────────── */
 .about-items {
   display: flex;
