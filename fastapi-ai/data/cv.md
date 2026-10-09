@@ -32,7 +32,18 @@ learning.
 
 ## Experience
 
-### Honeywell — Software Engineer I (Jul 2024–Present)
+### Ixperta — AI Specialist (Oct 2026–Present)
+
+- Maintaining and developing an enterprise internal AI chatbot deployed fully on local
+  infrastructure to preserve data privacy and control.
+- Integrated Model Context Protocol (MCP) servers into the internal platform to safely
+  connect LLMs with core company tools, databases, and APIs.
+- Managed Kubernetes deployments, monitoring application pods, optimizing resource allocation,
+  and ensuring high service availability.
+- Working with observability and governance frameworks using Langfuse for detailed LLM
+  trace monitoring and LiteLLM for centralized proxy routing and token tracking.
+
+### Honeywell — Software Engineer I (Jul 2024–Sep 2026)
 
 - Works on system test suites for an onboarding maintenance system running on
   custom hardware.
