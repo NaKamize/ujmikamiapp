@@ -9,15 +9,104 @@ from services.llm_service import LLMServiceError, llm_service
 
 logger = logging.getLogger(__name__)
 
+CAREER_KEYWORDS = (
+    "kde pracuje",
+    "pracuje",
+    "zamestnanie",
+    "firmu",
+    "firma",
+    "job",
+    "career",
+    "current role",
+    "works at",
+    "working at",
+    "where do you work",
+    "what do you do",
+    "what is your job",
+    "what is jozef's job",
+    "what does jozef do",
+    "what do you do at",
+    "role",
+    "position",
+    "company",
+    "employer",
+    "worked at",
+    "works for",
+    "intern",
+    "ai specialist",
+    "software engineer",
+    "title",
+    "pozicia",
+    "praca",
+    "zamestnan",
+    "zamestnaný",
+    "zamestnanost",
+    "co robis",
+    "čo robíš",
+    "čo robí",
+    "co robi",
+    "čo tam robí",
+    "co tam robi",
+    "tam robí",
+    "tam robi",
+    "to robí",
+    "to robi",
+    "on pracuje",
+    "ona pracuje",
+)
+
+PROJECT_KEYWORDS = (
+    "project",
+    "projects",
+    "implementation",
+    "architecture",
+    "portfolio",
+    "app",
+    "system",
+    "dataset",
+    "model",
+    "prototype",
+    "demo",
+)
+
+ACADEMIC_KEYWORDS = (
+    "thesis",
+    "research",
+    "publication",
+    "paper",
+    "study",
+    "university",
+    "bachelor",
+    "master",
+    "academic",
+    "education",
+    "school",
+    "publikacia",
+    "diplom",
+    "štúdia",
+    "studium",
+    "výskum",
+    "akadem",
+)
+
 INTENT_PROMPT = """You are the intent classifier for a portfolio website's AI assistant.
 Decide which kind of information the visitor's question is asking about:
 
 - "project": hands-on software engineering / machine learning projects, their
   implementation, tech stack, or results.
 - "academic": academic research, publications, or theoretical/thesis work.
-- "both": the question clearly spans both categories.
+- "career": work history, current role, responsibilities, employment, company, job title,
+  or questions about where the person works or what they do for a living.
+- "both": the question clearly spans multiple categories or is ambiguous.
 
-Respond with exactly one word: project, academic, or both. No punctuation, no explanation.
+Respond with exactly one word: project, academic, career, or both. No punctuation,
+no explanation.
+
+Examples:
+- "Kde pracuje Jozef?" -> career
+- "What is Jozef's job?" -> career
+- "Tell me about the disaster tweets project" -> project
+- "What was your thesis?" -> academic
 
 Question: {question}
 Answer:"""
@@ -37,9 +126,48 @@ Context:
 Answer:"""
 
 
+def infer_intent_from_question(question: str) -> Intent | None:
+    normalized = question.lower()
+
+    if any(keyword in normalized for keyword in CAREER_KEYWORDS):
+        return "career"
+    if any(keyword in normalized for keyword in ACADEMIC_KEYWORDS):
+        return "academic"
+    if any(keyword in normalized for keyword in PROJECT_KEYWORDS):
+        return "project"
+    return None
+
+
+def infer_intent_from_question(question: str) -> Intent | None:
+    normalized = question.lower()
+
+    if any(keyword in normalized for keyword in CAREER_KEYWORDS):
+        return "career"
+    if any(keyword in normalized for keyword in ACADEMIC_KEYWORDS):
+        return "academic"
+    if any(keyword in normalized for keyword in PROJECT_KEYWORDS):
+        return "project"
+    return None
+
+
 async def classify_intent(state: AgentState) -> AgentState:
     start = time.perf_counter()
-    prompt = INTENT_PROMPT.format(question=state["question"])
+    question = state["question"]
+    prior_context = state.get("conversation_context", [])
+    combined_question = " ".join([*prior_context, question]).strip()
+
+    keyword_intent = infer_intent_from_question(combined_question)
+    if keyword_intent is not None:
+        elapsed_ms = (time.perf_counter() - start) * 1000
+        logger.info(
+            "classify_intent: question=%r -> intent=%r via keyword rules (%.0fms)",
+            question,
+            keyword_intent,
+            elapsed_ms,
+        )
+        return {**state, "intent": keyword_intent}
+
+    prompt = INTENT_PROMPT.format(question=combined_question)
 
     try:
         reply = (await llm_service.invoke(prompt)).strip().lower()
@@ -49,6 +177,8 @@ async def classify_intent(state: AgentState) -> AgentState:
 
     if "both" in reply:
         intent: Intent = "both"
+    elif "career" in reply:
+        intent = "career"
     elif "academic" in reply:
         intent = "academic"
     elif "project" in reply:
@@ -57,7 +187,7 @@ async def classify_intent(state: AgentState) -> AgentState:
         intent = "both"
 
     elapsed_ms = (time.perf_counter() - start) * 1000
-    logger.info("classify_intent: question=%r -> intent=%r (%.0fms)", state["question"], intent, elapsed_ms)
+    logger.info("classify_intent: question=%r -> intent=%r (%.0fms)", question, intent, elapsed_ms)
     return {**state, "intent": intent}
 
 

@@ -25,12 +25,32 @@ def load_documents():
     return loader.load()
 
 
+def infer_document_category(document):
+    text = document.page_content.lower()
+    source = Path(document.metadata.get("source", "")).name
+
+    if source == "cv.md":
+        if "experience" in text or "ixperta" in text or "honeywell" in text or "anthology" in text:
+            return "career"
+        if "education" in text or "university" in text or "master" in text or "bachelor" in text:
+            return "academic"
+        if "project" in text or "selected computer vision projects" in text:
+            return "project"
+        return "both"
+
+    if any(keyword in text for keyword in ["thesis", "university", "research", "publication", "academic"]):
+        return "academic"
+    if any(keyword in text for keyword in ["experience", "job", "company", "works at", "worked at", "role"]):
+        return "career"
+    return "project"
+
+
 def split_documents(documents):
     splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=100)
     chunks = splitter.split_documents(documents)
     for chunk in chunks:
         filename = Path(chunk.metadata.get("source", "")).name
-        chunk.metadata["category"] = CATEGORY_OVERRIDES.get(filename, "project")
+        chunk.metadata["category"] = CATEGORY_OVERRIDES.get(filename, infer_document_category(chunk))
     return chunks
 
 

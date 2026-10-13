@@ -1,4 +1,5 @@
 import logging
+from collections import defaultdict, deque
 from collections.abc import AsyncIterator
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -13,6 +14,7 @@ from services.chroma_service import ChromaServiceError, chroma_service
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+RECENT_QUESTIONS_BY_CLIENT: dict[str, deque[str]] = defaultdict(lambda: deque(maxlen=5))
 
 
 @router.get("/health", response_model=HealthResponse)
@@ -30,22 +32,25 @@ async def chroma_health() -> ChromaHealthResponse:
     return ChromaHealthResponse(heartbeat=heartbeat)
 
 
-async def _stream_answer_tokens(question: str) -> AsyncIterator[str]:
-    state = initial_state(question)
+async def _stream_answer_tokens(question: str, client_id: str | None = None) -> AsyncIterator[str]:
+    history = list(RECENT_QUESTIONS_BY_CLIENT.get(client_id or "default", ())) if client_id else []
+    state = initial_state(question, conversation_context=history)
     try:
         async for message, metadata in graph.astream(state, stream_mode="messages"):
             if metadata.get("langgraph_node") != "synthesize_response":
                 continue
             if message.content:
                 yield message.content
-    except Exception as exc:
-        # Final safety net: individual nodes already catch their own service errors and
-        # degrade gracefully, so reaching here means something genuinely unexpected happened.
-        logger.exception("chat: unhandled error while streaming agent response")
-        yield f"\n\n[agent error: {exc}]"
+    finally:
+        if client_id:
+            history_list = RECENT_QUESTIONS_BY_CLIENT[client_id]
+            history_list.append(question)
+            while len(history_list) > 5:
+                history_list.popleft()
 
 
 @router.post("/api/v1/chat", dependencies=[Depends(chat_rate_limiter)])
 async def chat(request: ChatRequest) -> StreamingResponse:
     logger.info("chat: received question=%r", request.query)
-    return StreamingResponse(_stream_answer_tokens(request.query), media_type="text/plain")
+    client_id = request.headers.get("x-client-id") if hasattr(request, "headers") else None
+    return StreamingResponse(_stream_answer_tokens(request.query, client_id), media_type="text/plain")

@@ -1,6 +1,6 @@
 from typing import List, Literal, Optional, TypedDict
 
-Intent = Literal["project", "academic", "both"]
+Intent = Literal["project", "academic", "career", "both"]
 
 
 class AgentState(TypedDict):
@@ -9,7 +9,15 @@ class AgentState(TypedDict):
     context: List[str]
     response: str
     error: Optional[str]
+    conversation_context: List[str]
 
 
-def initial_state(question: str) -> AgentState:
-    return AgentState(question=question, intent="both", context=[], response="", error=None)
+def initial_state(question: str, conversation_context: Optional[List[str]] = None) -> AgentState:
+    return AgentState(
+        question=question,
+        intent="both",
+        context=[],
+        response="",
+        error=None,
+        conversation_context=list(conversation_context or []),
+    )
