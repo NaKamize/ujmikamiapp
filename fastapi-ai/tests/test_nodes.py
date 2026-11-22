@@ -6,54 +6,8 @@ from services.chroma_service import ChromaServiceError
 from services.llm_service import LLMServiceError
 
 
-async def test_classify_intent_project(monkeypatch):
-    state = initial_state("Tell me about the disaster tweets project")
-    fake_llm = AsyncMock()
-    fake_llm.invoke.return_value = "project"
-    monkeypatch.setattr(nodes_module, "llm_service", fake_llm)
-
-    result = await nodes_module.classify_intent(state)
-
-    assert result["intent"] == "project"
-
-
-async def test_classify_intent_academic(monkeypatch):
-    state = initial_state("Tell me about the thesis")
-    fake_llm = AsyncMock()
-    fake_llm.invoke.return_value = "Academic"
-    monkeypatch.setattr(nodes_module, "llm_service", fake_llm)
-
-    result = await nodes_module.classify_intent(state)
-
-    assert result["intent"] == "academic"
-
-
-async def test_classify_intent_falls_back_to_both_on_unexpected_reply(monkeypatch):
-    state = initial_state("hi")
-    fake_llm = AsyncMock()
-    fake_llm.invoke.return_value = "something unexpected"
-    monkeypatch.setattr(nodes_module, "llm_service", fake_llm)
-
-    result = await nodes_module.classify_intent(state)
-
-    assert result["intent"] == "both"
-
-
-async def test_classify_intent_degrades_gracefully_on_llm_failure(monkeypatch):
-    state = initial_state("hi")
-    fake_llm = AsyncMock()
-    fake_llm.invoke.side_effect = LLMServiceError("connection refused")
-    monkeypatch.setattr(nodes_module, "llm_service", fake_llm)
-
-    result = await nodes_module.classify_intent(state)
-
-    assert result["intent"] == "both"
-    assert result["error"] == "connection refused"
-
-
-async def test_retrieve_context_filters_by_intent_including_both_tagged_chunks(monkeypatch):
+async def test_retrieve_context_queries_without_intent_filter(monkeypatch):
     state = initial_state("pyspark?")
-    state["intent"] = "project"
 
     fake_embeddings = AsyncMock()
     fake_embeddings.embed_query.return_value = [0.1, 0.2, 0.3]
@@ -67,10 +21,10 @@ async def test_retrieve_context_filters_by_intent_including_both_tagged_chunks(m
 
     assert result["context"] == ["chunk one", "chunk two"]
     _, kwargs = fake_chroma.query.call_args
-    assert kwargs["where"] == {"category": {"$in": ["project", "both"]}}
+    assert kwargs["where"] is None
 
 
-async def test_retrieve_context_no_filter_when_intent_is_both(monkeypatch):
+async def test_retrieve_context_no_filter_for_arbitrary_query(monkeypatch):
     state = initial_state("anything")
 
     fake_embeddings = AsyncMock()

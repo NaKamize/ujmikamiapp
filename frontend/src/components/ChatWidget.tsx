@@ -3,7 +3,7 @@ import Markdown from 'markdown-to-jsx';
 import './ChatWidget.css';
 
 const AI_SERVICE_URL = process.env.REACT_APP_AI_SERVICE_URL;
-const REQUEST_TIMEOUT_MS = 20000;
+const REQUEST_TIMEOUT_MS = 60000;
 const OFFLINE_MESSAGE =
   'Notice: The local AI microservice is currently offline. To see this LangGraph agent run locally, clone the repository, run `docker compose up`, and refresh this page.';
 

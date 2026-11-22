@@ -18,7 +18,6 @@ class _FakeMessage:
 
 async def _fake_astream(inputs, stream_mode=None):
     for node, content in [
-        ("classify_intent", "project"),
         ("retrieve_context", ""),
         ("synthesize_response", "Hello "),
         ("synthesize_response", "world"),
