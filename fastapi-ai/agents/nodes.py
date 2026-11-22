@@ -146,18 +146,6 @@ def infer_intent_from_question(question: str) -> Intent | None:
     return None
 
 
-def infer_intent_from_question(question: str) -> Intent | None:
-    normalized = question.lower()
-
-    if any(keyword in normalized for keyword in CAREER_KEYWORDS):
-        return "career"
-    if any(keyword in normalized for keyword in ACADEMIC_KEYWORDS):
-        return "academic"
-    if any(keyword in normalized for keyword in PROJECT_KEYWORDS):
-        return "project"
-    return None
-
-
 async def classify_intent(state: AgentState) -> AgentState:
     start = time.perf_counter()
     question = state["question"]
