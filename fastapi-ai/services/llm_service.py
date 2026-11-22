@@ -1,7 +1,9 @@
 import logging
 from typing import AsyncIterator, Optional
 
+from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_ollama import ChatOllama
+from langchain_openai import AzureChatOpenAI
 
 from config.settings import settings
 
@@ -12,14 +14,8 @@ class LLMServiceError(Exception):
     """Raised when the configured LLM backend is unreachable or returns an error."""
 
 
-def _build_llm(provider: str, base_url: Optional[str], model: Optional[str]):
+def _build_llm(provider: str, base_url: Optional[str], model: Optional[str]) -> BaseChatModel:
     if provider == "azure_openai":
-        # Imported lazily so local dev (ollama provider) never needs Azure credentials
-        # or the langchain-openai import at startup.
-        from langchain_openai import AzureChatOpenAI
-
-        # No explicit temperature: gpt-5-family reasoning models reject any
-        # value other than the default.
         return AzureChatOpenAI(
             azure_endpoint=settings.azure_openai_endpoint,
             api_key=settings.azure_openai_api_key,
@@ -30,7 +26,10 @@ def _build_llm(provider: str, base_url: Optional[str], model: Optional[str]):
         return ChatOllama(
             base_url=base_url or settings.ollama_base_url,
             model=model or settings.ollama_model,
-            temperature=0,
+            temperature=settings.temperature,
+            top_p=settings.top_p,
+            top_k=settings.top_k,
+            repeat_penalty=settings.repeat_penalty,
         )
     raise ValueError(f"Unknown LLM_PROVIDER {provider!r}; expected 'ollama' or 'azure_openai'")
 

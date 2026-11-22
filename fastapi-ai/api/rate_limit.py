@@ -3,6 +3,7 @@ from collections import defaultdict, deque
 from collections.abc import Callable
 
 from fastapi import HTTPException, Request
+from config.settings import settings
 
 
 class RateLimiter:
@@ -47,8 +48,6 @@ class RateLimiter:
 
 
 def _build_chat_rate_limiter() -> RateLimiter:
-    from config.settings import settings
-
     return RateLimiter(
         max_requests=settings.chat_rate_limit_requests,
         window_seconds=settings.chat_rate_limit_window_seconds,

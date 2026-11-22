@@ -5,13 +5,12 @@ Contact: makisjozef28@gmail.com, (+421) 951 891 847. GitHub: github.com/NaKamize
 
 ## Profile
 
-A goal-oriented software engineer with a Master's degree in Artificial
-Intelligence and Computer Vision. Combines solid software engineering
-fundamentals with strong mathematical and analytical thinking. Recognized in
-the IT SPY competition for solving complex academic and research problems,
-supported by an international scientific publication. Currently looking for
-opportunities in Python development, cloud applications, or applied machine
-learning.
+Software and AI engineer with a Master's degree in Information Technology and
+Artificial Intelligence (Computer Vision specialization), combining solid backend
+and cloud engineering fundamentals with strong analytical and mathematical problem-solving.
+Recognized in the IT SPY competition and co-author of an international peer-reviewed
+publication, with hands-on experience building applied AI systems, data pipelines,
+and production services.
 
 ## Key highlights
 
@@ -25,31 +24,36 @@ learning.
 
 ## Technical skills
 
-- **Programming and APIs**: Python, SQL, REST API, Django REST Framework, testing
-- **Data and databases**: relational databases, ETL, PySpark, Databricks, data validation
-- **Cloud and tooling**: Microsoft Azure, Docker Compose, Git, Linux
-- **Additional technologies**: React, TypeScript, OpenCV, YOLO, PyTorch, Hugging Face Transformers, scikit-learn
+- **Programming and APIs**: Python, SQL, Fast API, Django REST Framework, LiteLLM, LangGraph/LangChain, MCP, Langfuse
+- **Data and databases**: Relational databases, NoSQL databases (Qdrant, Chroma, MongoDB)
+- **Cloud and tooling**: Microsoft Azure, Docker, Helm, Git, Linux
+- **Additional technologies**: React, TypeScript, OpenCV, PyTorch, Hugging Face Transformers, scikit-learn
 
 ## Experience
 
-### Ixperta — AI Specialist (Oct 2026–Present)
+### IXPERTA — AI Specialist (Oct 2026–Present)
 
-- Maintaining and developing an enterprise internal AI chatbot deployed fully on local
-  infrastructure to preserve data privacy and control.
-- Integrated Model Context Protocol (MCP) servers into the internal platform to safely
-  connect LLMs with core company tools, databases, and APIs.
-- Managed Kubernetes deployments, monitoring application pods, optimizing resource allocation,
-  and ensuring high service availability.
-- Working with observability and governance frameworks using Langfuse for detailed LLM
-  trace monitoring and LiteLLM for centralized proxy routing and token tracking.
+- Develop and maintain an enterprise internal AI chatbot on local
+  infrastructure to ensure data privacy and operational control.
+- Integrate Model Context Protocol (MCP) servers to connect LLMs
+  safely with internal tools, databases, and APIs.
+- Manage Kubernetes deployments, monitor pods, tune resource allocation,
+  and maintain high availability.
+- Implement LLM observability and routing with Langfuse (trace and quality
+  monitoring) and LiteLLM (centralized proxy gateway and token/cost tracking).
+- Build LLM-based document validation and RAG workflows that check documents
+  against parsed requirements with structured outputs and source traceability.
 
-### Honeywell — Software Engineer I (Jul 2024–Sep 2026)
+### Honeywell Aerospace — Software Engineer I (Jul 2024–Jul 2026)
 
-- Works on system test suites for an onboarding maintenance system running on
-  custom hardware.
-- Uses internal Python frameworks to verify behavior at the hardware level.
-- Supports failure analysis and root cause investigation across software and
-  hardware.
+- Developed and maintained automated Python system test suites to validate
+  custom hardware functionality for an onboarding maintenance system.
+- Built and extended test cases and verification workflows using internal
+  Python frameworks to test system behavior, edge cases, and hardware-software interactions.
+- Investigated test failures and performed cross-layer root cause analysis
+  across software and hardware, isolating defects and documenting clear reproduction steps.
+- Supported regression testing and release readiness by tracking recurring issues,
+  improving test reliability, and collaborating with team members on system diagnostics.
 
 ### Anthology Inc. — Software Developer Intern (Apr 2023–Apr 2024)
 

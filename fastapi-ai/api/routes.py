@@ -36,11 +36,15 @@ async def _stream_answer_tokens(question: str, client_id: str | None = None) -> 
     history = list(RECENT_QUESTIONS_BY_CLIENT.get(client_id or "default", ())) if client_id else []
     state = initial_state(question, conversation_context=history)
     try:
-        async for message, metadata in graph.astream(state, stream_mode="messages"):
-            if metadata.get("langgraph_node") != "synthesize_response":
-                continue
-            if message.content:
-                yield message.content
+        try:
+            async for message, metadata in graph.astream(state, stream_mode="messages"):
+                if metadata.get("langgraph_node") != "synthesize_response":
+                    continue
+                if message.content:
+                    yield message.content
+        except Exception:
+            logger.exception("chat: agent failed for question=%r", question)
+            yield "Sorry, there was an agent error. Please try again shortly."
     finally:
         if client_id:
             history_list = RECENT_QUESTIONS_BY_CLIENT[client_id]

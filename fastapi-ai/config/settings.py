@@ -20,13 +20,16 @@ class Settings(BaseSettings):
 
     embedding_model: str = "BAAI/bge-small-en-v1.5"
 
-    # Local provider for LLMs. Ollama is the default
     llm_provider: str = "ollama"
 
     ollama_base_url: str = "http://host.docker.internal:11434"
     ollama_model: str = "qwen2.5-coder:7b"
+    reasoning: bool = False
+    temperature: float = 0.7
+    top_p: float = 0.8
+    top_k: int = 20
+    repeat_penalty: float = 1.0
 
-    # Only read when llm_provider == "azure_openai".
     azure_openai_endpoint: str = ""
     azure_openai_api_key: str = ""
     azure_openai_deployment: str = "gpt-5.4-mini"
@@ -50,4 +53,4 @@ def get_settings() -> Settings:
     return Settings()
 
 
-settings = get_settings()
+settings: Settings = get_settings()
