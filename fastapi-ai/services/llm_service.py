@@ -26,6 +26,7 @@ def _build_llm(provider: str, base_url: Optional[str], model: Optional[str]) -> 
         return ChatOllama(
             base_url=base_url or settings.ollama_base_url,
             model=model or settings.ollama_model,
+            reasoning=settings.reasoning,
             temperature=settings.temperature,
             top_p=settings.top_p,
             top_k=settings.top_k,
