@@ -1,19 +1,19 @@
-# Moje portfólio
+# My Portfolio
 
-Toto je moje osobné portfólio ako softvérového a ML inžiniera. Predstavuje moje skúsenosti, projekty, výskum a práce v oblasti webového vývoja, strojového učenia a informačných systémov.
+This is my personal portfolio as a software and ML engineer. It presents my experience, projects, research, and work in web development, machine learning, and information systems.
 
-Aplikácia spája React a TypeScript so backendom postaveným na Djangu a Django REST Frameworku. Obsahuje sekcie o mojom pôsobení, publikáciách, projektoch a výsledkoch modelov strojového učenia.
+The application combines React and TypeScript with a backend built using Django and Django REST Framework. It includes sections about my experience, publications, projects, and machine learning model results.
 
-## Čo je v projekte
+## Project Highlights
 
-- Prehľad projektov a pracovných skúseností
-- ML showcase s architektúrami, metrikami a výsledkami súťaží
-- REST API na správu obsahu portfólia
-- Chat asistent, ktorý odpovedá na otázky o mojich prácach
-- Azure nasadenie pomocou Container Apps, Static Web Apps a ďalších infraštruktúrnych služieb
+- Overview of projects and work experience
+- ML showcase with architectures, metrics, and competition results
+- REST API for managing portfolio content
+- Chat assistant for questions about my work
+- Azure deployment using Container Apps, Static Web Apps, and supporting infrastructure
 
-## Použité technológie
+## Technologies
 
-Frontend je vytvorený v **Reacte 19** a **TypeScriptu**. Backend využíva **Django**, **Django REST Framework**, **PostgreSQL** a REST API. Samostatná AI služba beží na **FastAPI**, **LangGraphe** a **ChromaDB** a využíva RAG prístup na vyhľadanie relevantného kontextu z mojich CV a projektových údajov.
+The frontend is built with **React 19** and **TypeScript**. The backend uses **Django**, **Django REST Framework**, **PostgreSQL**, and REST APIs. A separate AI service runs on **FastAPI**, **LangGraph**, and **ChromaDB**, using a RAG approach to retrieve relevant context from my CV and project data.
 
-Projekt je pripravený na spustenie cez **Docker Compose** a infraštruktúra v Azure je popísaná pomocou **Terraformu**.
+The project can be run with **Docker Compose**, while its Azure infrastructure is defined using **Terraform**.
