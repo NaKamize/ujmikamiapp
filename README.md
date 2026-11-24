@@ -1,64 +1,19 @@
-# Portfolio: Software Engineering & Machine Learning
+# My Portfolio
 
-Vitajte na mojom osobnom portfóliu. Tento web slúži ako prezentácia mojich projektov v oblasti softvérového inžinierstva a strojového učenia, ktoré som vyvinul ako súčasť mojej cesty za pokročilým vývojom backend systémov a modelov.
+This is my personal portfolio as a software and ML engineer. It presents my experience, projects, research, and work in web development, machine learning, and information systems.
 
-Aplikáciu si môžete pozrieť na adrese: https://zealous-bay-04c9a6603.7.azurestaticapps.net/.
+The application combines React and TypeScript with a backend built using Django and Django REST Framework. It includes sections about my experience, publications, projects, and machine learning model results.
 
-## O projekte
+## Project Highlights
 
-Táto platforma spája moderný frontend s robustným backendom. Frontend je postavený na React 19 v kombinácii s TypeScriptom, zatiaľ čo backend využíva Django 6 a Django REST Framework na efektívne spravovanie dát a API komunikáciu.
+- Overview of projects and work experience
+- ML showcase with architectures, metrics, and competition results
+- REST API for managing portfolio content
+- Chat assistant for questions about my work
+- Azure deployment using Container Apps, Static Web Apps, and supporting infrastructure
 
-## Technologický stack
+## Technologies
 
-Frontend: React 19, TypeScript
-Backend: Django 6, Django REST Framework, SQLite
-Nasadenie: Docker Compose
+The frontend is built with **React 19** and **TypeScript**. The backend uses **Django**, **Django REST Framework**, **PostgreSQL**, and REST APIs. A separate AI service runs on **FastAPI**, **LangGraph**, and **ChromaDB**, using a RAG approach to retrieve relevant context from my CV and project data.
 
-## Inštalácia a spustenie
-
-Pre spustenie lokálnej verzie projektu postupujte nasledovne:
-
-### Backend
-
-Prejdite do zložky backendu a pripravte si virtuálne prostredie:
-cd backend/ujmikamiapp
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-
-Následne spustite migráciu databázy a naplňte ju dátami:
-python manage.py migrate
-python manage.py seed_ml_models
-python manage.py runserver
-
-### Frontend
-
-V zložke frontend nainštalujte závislosti a spustite vývojový server:
-cd frontend
-npm install
-REACT_APP_API_BASE_URL=http://localhost:8000 npm start
-
-Pre komplexné spustenie pomocou Dockeru môžete použiť príkaz:
-docker compose up --build
-
-## Prehľad API
-
-Projekt obsahuje REST API rozhranie pre správu projektov a modelov strojového učenia.
-
-### Projekty
-
-GET /api/projects/: Zoznam všetkých projektov
-GET /api/projects/<id>/: Detail konkrétneho projektu
-
-### Strojové učenie
-
-GET /api/ml-models/: Prehľad mojich projektov v oblasti ML
-GET /api/ml-models/<id>/: Detail modelu vrátane metrík a leaderboardu
-
-## ML Modely
-
-Integrovaná podpora pre seeding modelov umožňuje jednoduchú správu obsahu. V súčasnosti projekt obsahuje:
-Chatbot Arena (predikcia preferencií LLM)
-Klasifikácia tweetov o katastrofách
-Fashion-MNIST (úspešný projekt v súťaži AI-Biz2026)
-
-Pre spustenie testov backendovej časti použite príkaz python manage.py test ml_models v zložke backendu.
+The project can be run with **Docker Compose**, while its Azure infrastructure is defined using **Terraform**.

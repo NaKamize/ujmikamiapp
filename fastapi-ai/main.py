@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from ingest import run_ingest
 from api.routes import router
 from config.logging import configure_logging
 from config.settings import settings
@@ -12,10 +13,7 @@ configure_logging()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    if settings.chroma_mode == "embedded":
-        from ingest import run_ingest
-
-        await run_ingest()
+    await run_ingest()
     yield
 
 

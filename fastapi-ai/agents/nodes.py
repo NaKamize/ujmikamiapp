@@ -30,6 +30,8 @@ Question:
 </context>
 
 Answer:"""
+
+
 async def retrieve_context(state: AgentState) -> AgentState:
     start = time.perf_counter()
 
@@ -47,6 +49,8 @@ async def retrieve_context(state: AgentState) -> AgentState:
 
     elapsed_ms = (time.perf_counter() - start) * 1000
     logger.info("retrieve_context: %d chunk(s) retrieved (%.0fms)", len(documents), elapsed_ms)
+    for i, doc in enumerate(documents, start=1):
+        logger.info("retrieve_context: chunk %d: %s", i, doc)
     return {**state, "context": documents}
 
 

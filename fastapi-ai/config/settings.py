@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     chroma_ssl: bool = False
     chroma_collection_name: str = "portfolio_projects"
 
-    embedding_model: str = "BAAI/bge-small-en-v1.5"
+    embedding_model: str = "BAAI/bge-m3"
 
     llm_provider: str = "ollama"
 
