@@ -12,9 +12,30 @@ from projects.models import WorkExperience, WorkExperienceTechnology
 
 EXPERIENCES_DATA = [
     {
+        'company': 'IXPERTA',
+        'role': 'AI Specialist',
+        'period': 'October 2026 – Present',
+        'location': 'Brno, Czech Republic',
+        'description': (
+            'I specialize in AI solutions, focusing on integrating large language models'
+            'and retrieval-augmented generation into practical applications.'
+            'I work with Langfuse for managing and monitoring AI workflows, and I am deeply'
+            'involved in prompt engineering to optimize model performance.'
+        ),
+        'current': True,
+        'order': 1,
+        'technologies': [
+            {'label': 'Python'},
+            {'label': 'Langfuse'},
+            {'label': 'LLMs'},
+            {'label': 'RAG'},
+            {'label': 'Prompt Engineering'},
+        ],
+    },
+    {
         'company': 'Honeywell',
         'role': 'Software Engineer I',
-        'period': 'Jul 2024 – Present',
+        'period': 'Jul 2024 – September 2026',
         'location': 'Brno, Czech Republic',
         'description': (
             'I work on system test suites for an onboarding maintenance system running '
@@ -22,8 +43,8 @@ EXPERIENCES_DATA = [
             'at the hardware level and support failure analysis and root cause investigation '
             'across both software and hardware.'
         ),
-        'current': True,
-        'order': 1,
+        'current': False,
+        'order': 2,
         'technologies': [
             {'label': 'Python'},
             {'label': 'SQL'},
@@ -44,7 +65,7 @@ EXPERIENCES_DATA = [
             'and supporting the backend data workflow implementation.'
         ),
         'current': False,
-        'order': 2,
+        'order': 3,
         'technologies': [
             {'label': 'Python'},
             {'label': 'PySpark'},
@@ -66,7 +87,7 @@ EXPERIENCES_DATA = [
             'developing a full-stack Personal Portfolio Platform using React, TypeScript, and Django REST.'
         ),
         'current': False,
-        'order': 3,
+        'order': 4,
         'technologies': [
             {'label': 'Python'},
             {'label': 'React'},
@@ -96,7 +117,6 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f'Cleared {count} experience(s).'))
             return
 
-        # Clear existing
         WorkExperience.objects.all().delete()
         self.stdout.write('Cleared existing work experiences.')
 

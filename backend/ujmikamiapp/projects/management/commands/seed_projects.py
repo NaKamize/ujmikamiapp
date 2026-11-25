@@ -105,20 +105,18 @@ PROJECTS_DATA = [
         ],
     },
     {
-        'title': 'Grepolis Game Bot',
+        'title': 'Web page for SM Forest',
         'description': (
-            'Designed and implemented automated bot for the web-based strategy game Grepolis. '
-            'Currently it has the biggest popularity in slovak game scene with 77 downloads and more. '
-            'Application is built within tempermonkey extension using typescript. '
+            'Developed the official website for SM Forest, focusing on frontend design and implementation using HTML and CSS. '
+            'Helping to establish the online presence of the organization. Creating domain and hosting setup for the website.'
         ),
-        'category': 'fullstack',
-        'image': 'projects/grepolisbot_preview.png',
-        'stat': 'Typescript, Web Scraping, Web Development',
+        'category': 'frontend',
+        'image': 'projects/sm-forest.png',
+        'stat': 'Html - Css',
         'order': 6,
-        'tag_names': ['Web Scraping', 'Typescript'],
+        'tag_names': ['Frontend', 'HTML', 'CSS'],
         'links': [
-            {'label': 'Geasyfork', 'url': 'https://greasyfork.org/en/scripts/468760-grepolisbot'},
-            {'label': 'GitHub Repo', 'url': 'https://github.com/NaKamize/GrepolisBot'},
+            {'label': 'Website', 'url': 'https://www.sm-forest.sk/'},
         ],
     }
 ]
@@ -137,10 +135,6 @@ class Command(BaseCommand):
         if not local_image_path.exists():
             return
 
-        # The seed images already live at their final MEDIA_ROOT location (image_path matches
-        # the model's upload_to path), so point the field at them directly instead of copying
-        # through storage — copying made Django see a name collision with the source file
-        # itself and append a random suffix, accumulating a new duplicate on every reseed.
         project.image.name = image_path
         project.save(update_fields=['image'])
 
@@ -159,19 +153,16 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f'Cleared {count} project(s) and all tags.'))
             return
 
-        # Clear existing
         Project.objects.all().delete()
         Tag.objects.all().delete()
         self.stdout.write('Cleared existing projects and tags.')
 
-        # Create tags
         tag_map = {}
         for tag_data in TAGS_DATA:
             tag, created = Tag.objects.get_or_create(name=tag_data['name'])
             tag_map[tag.name] = tag
         self.stdout.write(f'  ✓ Created {len(tag_map)} tags.')
 
-        # Create projects
         for data in PROJECTS_DATA:
             tag_names = data.pop('tag_names', [])
             links = data.pop('links', [])
